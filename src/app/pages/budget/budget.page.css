@@ -1,0 +1,28 @@
+.budgetBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightblue;
+    padding: 5px;
+}
+
+
+
+
+.budgetPageDiv{
+    background-color: lightgray;
+    display: grid;
+    grid: auto / auto auto auto;
+    grid-gap: 10px;
+}
+
+.budgetPageDiv > div{
+    text-align: center;
+    border: 2px black solid ;
+    background-color: lightblue;
+    margin: 10px;
+}
+
+.categoriesDiv{
+    background-color: lightblue;
+}

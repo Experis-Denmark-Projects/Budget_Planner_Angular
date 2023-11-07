@@ -1,0 +1,8 @@
+.headerDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lightblue;
+    border: 2px solid black;
+    padding: 5px;
+}
