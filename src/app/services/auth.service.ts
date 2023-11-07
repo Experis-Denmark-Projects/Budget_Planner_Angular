@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
-import { catchError, filter, switchMap, takeWhile } from 'rxjs/operators'
-import { Subject, of } from 'rxjs';
+import { catchError, switchMap, tap} from 'rxjs/operators'
+import { forkJoin, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,48 +29,61 @@ export class AuthService {
               'Authorization': `Bearer ${this.accessToken}`,
               'Content-Type': `application/json`,
             })
-            return token
-          }),
-          // Get User
-          switchMap(() => {
-            const headers = new HttpHeaders({
-              'Authorization': `Bearer ${this.accessToken}`,
-              'Content-Type': `application/json`,
-            })
             return this.http.get(`${this.apiUrl}/private/user`, {
               headers: headers,
               withCredentials: true,
               observe: 'response',
               responseType: 'json'
             }).pipe(
-              catchError(error => of(new HttpResponse({status: 400})))
+              catchError(error => of(new HttpResponse({ status: 400 })))
             )
           }),
           switchMap((response:any) => {
-            if(response.status !== 400){
-              return response
+            if(response?.status !== 400){
+              return of(response)
             }else{
-              return this.http.post(`${this.apiUrl}/private/user`, {}, {
+              const createUserRequest = this.http.post(`${this.apiUrl}/private/user`, {}, {
                 headers: headers,
                 withCredentials: true,
                 observe: 'response',
                 responseType: 'json'
               }).pipe(
                 catchError(error => of(new HttpResponse({status: 400})))
-              )
+              );
+
+              return forkJoin([of(response), createUserRequest]);
             }
           }), 
-          switchMap((response:any) => {
+          switchMap((responses:any[]) => {
             //this.user = {...response.body, categories: []}
-            console.log(`Response Body: ${response.body}`)
-            return response
+            if(responses[0]?.status === 400){
+              this.user = {...responses[1]?.body, categories: [] }
+            }else{
+              this.user = {...responses[0]?.body, categories: [] }
+            }
+
+            return this.http.get(`${this.apiUrl}/private/user/category`, {
+              headers: headers,
+              withCredentials: true,
+              observe: 'response',
+              responseType: 'json'
+            }).pipe(
+              catchError(error => of(new HttpResponse({ status: 400 }))
+            ));
           }),
-          switchMap((response:any) => {
-            //this.user.categories = response.body
-            //console.log(`Categories: ${this.user.categories}`)
-            return response
+          switchMap((response: any) => {
+            if(response?.status !== 400){
+              this.user.categories = response?.body;
+            }
+
+            return of(response)
+          }),
+          catchError(error => of(new HttpResponse({ status: 400 })))
+        ).subscribe({
+          error: (error => {
+
           })
-        ).subscribe()
+        })
       }
     })
   }
