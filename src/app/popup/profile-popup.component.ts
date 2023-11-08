@@ -23,6 +23,11 @@ export class PopupComponent {
     this.router.navigateByUrl('/profile')
   }
 
+  navigateToBudget(){
+    this.onClose()
+    this.router.navigateByUrl('/budget')
+  }
+
   login(){
     this.onClose()
     this.auth.login()

@@ -45,8 +45,8 @@ export class NavbarComponent implements OnInit{
     this.popupService.openPopup();
     this.dialog.open(PopupComponent, {
       id: 'popup-dialog',
-      width: '70px',
-      height: '100px',
+      width: '80px',
+      height: '150px',
       position: {top: '60px', right: '20px'}
     })
   }
