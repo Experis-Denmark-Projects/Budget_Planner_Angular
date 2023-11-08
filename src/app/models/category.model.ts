@@ -3,7 +3,7 @@ import { User } from './user.model'
 
 export type Category = {
     id?: number,
-    uid?: string,
+    name?: string,
     user?: User,
-    expenses: Expense[]
+    expenses?: Expense[]
 }

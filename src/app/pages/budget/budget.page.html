@@ -13,7 +13,7 @@
 
 <div class="budgetPageDiv">
     
-    <div class="categoriesDiv">
+    <div class="categoriesDiv"  >
         <h3>
             category 1
         </h3>
@@ -27,7 +27,12 @@
             Total: 100kr
         </div>
     </div>
-
-
-
 </div>
+
+<form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+    <!-- Name Div -->
+    <div class="name-div">
+        <app-input [control]="name" placeholder="Enter category name"/>
+    </div>
+    <button>Create Category</button>
+</form >

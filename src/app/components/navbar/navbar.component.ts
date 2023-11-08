@@ -3,6 +3,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { MatDialog } from '@angular/material/dialog'
 import { PopupComponent } from 'src/app/popup/profile-popup.component';
+import { of } from 'rxjs'
+import { catchError } from 'rxjs/operators'
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +20,21 @@ export class NavbarComponent implements OnInit{
       this.dialog.getDialogById('popup-dialog')?.close()
     })
 
-    
+    this.auth.accessToken$.pipe(
+      catchError(error => {
+        console.log(`Navbar Access Token Error`)
+        return of()
+      })
+    ).subscribe({
+      next: (accessToken:string) => {
+        if(auth.isAuthenticated){
+            
+        }
+      },
+      error: () => {
+        
+      }
+    })
   }
 
   ngOnInit(): void {

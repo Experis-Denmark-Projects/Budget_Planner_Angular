@@ -14,8 +14,8 @@ export class AuthService {
   accessToken:string = ''
   idToken:string = ''
   isAuthenticated:boolean = false
-  user:User = {};
-  public isAuthenticated$:Observable<boolean>
+  private user:User = {};
+  //public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
   private apiUrl = environment.apiUrl;
 
@@ -23,9 +23,13 @@ export class AuthService {
     return this.user
   }
 
+  public set User(value:User){
+    this.user = value
+  }
+
   constructor(private auth0:Auth0AuthService, private http: HttpClient) { 
 
-    this.isAuthenticated$ = this.auth0.isAuthenticated$
+    //this.isAuthenticated$ = this.auth0.isAuthenticated$
     this.accessToken$ = this.auth0.getAccessTokenSilently()
 
     this.auth0.isAuthenticated$.subscribe((isAuthenticated) => {
@@ -92,7 +96,6 @@ export class AuthService {
           catchError(error => of(new HttpResponse({ status: 400 })))
         ).subscribe({
           error: (error => {
-
           })
         })
       }
@@ -102,9 +105,13 @@ export class AuthService {
   login() {
     this.auth0.loginWithRedirect({
       appState: {
-        target: '/'
+        target: '/budget'
       }
-    }).subscribe({
+    })
+    .pipe(
+      catchError(error => of(new HttpResponse({ status: 400 })))
+    )
+    .subscribe({
       next: () => {
 
       }

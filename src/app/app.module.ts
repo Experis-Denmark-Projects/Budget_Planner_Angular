@@ -11,6 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PopupComponent } from './popup/profile-popup.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProfilePage } from './pages/profile/profile.page';
+import { InputComponent } from './components/input/input.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -19,10 +22,14 @@ import { ProfilePage } from './pages/profile/profile.page';
     BudgetPage,
     NavbarComponent,
     PopupComponent,
-    ProfilePage
+    ProfilePage,
+    InputComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxMaskDirective,
     AppRoutingModule,
     HttpClientModule,
     HttpClientJsonpModule,
@@ -40,6 +47,7 @@ import { ProfilePage } from './pages/profile/profile.page';
     BrowserAnimationsModule
   ],
   providers: [
+    provideEnvironmentNgxMask()
   ],
   bootstrap: [AppComponent]
 })

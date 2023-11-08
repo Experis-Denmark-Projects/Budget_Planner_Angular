@@ -1,0 +1,10 @@
+.red {
+    color: red;
+    
+}
+
+.input{
+    width: 300px;
+    max-width: 100%;
+    word-wrap: break-word;
+}

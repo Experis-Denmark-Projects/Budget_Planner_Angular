@@ -1,0 +1,19 @@
+<input class="input" [formControl]="control" [type]="type" [placeholder]="placeholder" [mask]="format" [dropSpecialCharacters]="false"/>
+<ng-container>
+    <!-- Required Field -->
+    <p class="red" *ngIf="control.errors?.['required']">
+        Field is required
+    </p>
+    <!-- Min Length Requirement -->
+    <p class="red" *ngIf="control.errors?.['minLength']">
+        Field must be at least: {{ control.errors?.['minLength'] }} characters long.
+    </p>
+    <!-- Max Length Requirement -->
+    <p class="red" *ngIf="control.errors?.['maxLength']">
+        Field must not exceed: {{ control.errors?.['maxLength'] }} characters.
+    </p>
+    <!-- Valid Email Requirement -->
+    <p class="red" *ngIf="control.errors?.['email']">
+        You must enter a valid email.
+    </p>
+</ng-container>
