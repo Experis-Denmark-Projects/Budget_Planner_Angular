@@ -1,0 +1,18 @@
+.profileDiv{
+    background-color: lightgrey;
+    height: 100%;
+}
+
+.loginDiv{
+   
+
+    align-items: center;
+    text-align: center;
+    margin-top: 200px;
+    
+}
+
+.logo{
+    width: 200px;
+    height: auto;
+}
