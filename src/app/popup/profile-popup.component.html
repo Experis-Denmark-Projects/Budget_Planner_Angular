@@ -1,0 +1,7 @@
+<div class="popup">
+    <button (click)="onClose()" class="popup-close-button"><span>x</span></button>
+    <!-- Profile Nativation Button-->
+    <button (click)="router.navigateByUrl('/profile')">Profile</button>
+    <!-- Sign In / Out Button -->
+    <button (click)="auth.isAuthenticated ? logout() : login()">{{ auth.isAuthenticated ? 'Logout' : 'Login' }}</button>
+</div>

@@ -1,0 +1,18 @@
+.popup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup button:not(.popup-close-button){
+    margin-top: 25px;
+}
+
+.popup-close-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    font-size: small;
+}

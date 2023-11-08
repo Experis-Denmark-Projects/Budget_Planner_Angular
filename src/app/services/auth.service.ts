@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
 import { catchError, switchMap, tap} from 'rxjs/operators'
@@ -15,6 +15,11 @@ export class AuthService {
   isAuthenticated:boolean = false
   user:User = {};
   private apiUrl = environment.apiUrl;
+
+  public get User(){
+    return this.user
+  }
+
   constructor(private auth0:Auth0AuthService, private http: HttpClient) { 
 
     this.auth0.isAuthenticated$.subscribe((isAuthenticated) => {
@@ -38,6 +43,7 @@ export class AuthService {
               catchError(error => of(new HttpResponse({ status: 400 })))
             )
           }),
+          // Get User if exists othewise crete new user
           switchMap((response:any) => {
             if(response?.status !== 400){
               return of(response)
@@ -54,8 +60,8 @@ export class AuthService {
               return forkJoin([of(response), createUserRequest]);
             }
           }), 
+          // Get Categories
           switchMap((responses:any[]) => {
-            //this.user = {...response.body, categories: []}
             if(responses[0]?.status === 400){
               this.user = {...responses[1]?.body, categories: [] }
             }else{
@@ -75,7 +81,6 @@ export class AuthService {
             if(response?.status !== 400){
               this.user.categories = response?.body;
             }
-
             return of(response)
           }),
           catchError(error => of(new HttpResponse({ status: 400 })))
@@ -106,6 +111,5 @@ export class AuthService {
         returnTo: `${window.location.origin}`
       }
     });
-    localStorage.clear();
   }
 }

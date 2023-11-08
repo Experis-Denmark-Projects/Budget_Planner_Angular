@@ -7,19 +7,24 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { LoginPage } from './pages/login/login.page';
 import { BudgetPage } from './pages/budget/budget.page';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PopupComponent } from './popup/profile-popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPage,
     BudgetPage,
-    NavbarComponent
+    NavbarComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     HttpClientJsonpModule,
+    MatDialogModule,
     AuthModule.forRoot({
       domain: 'dev-nw60en5uln7ga8bc.us.auth0.com',
       clientId: 'lmLrN3b6iyLrqmQedKT3fAwJbY6rTunQ',
@@ -29,7 +34,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
       },
       useRefreshTokensFallback: true,
       cacheLocation: 'localstorage'
-    })
+    }),
+    BrowserAnimationsModule
   ],
   providers: [
   ],

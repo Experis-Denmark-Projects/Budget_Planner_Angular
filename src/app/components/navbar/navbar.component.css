@@ -1,8 +1,28 @@
 .headerDiv{
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     background-color: lightblue;
     border: 2px solid black;
     padding: 5px;
+}
+
+.profile-button{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    gap: 10px;
+}
+
+.profile-button img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.profile-button p{
+    margin: 0;
+    font-size: 16px;
 }
