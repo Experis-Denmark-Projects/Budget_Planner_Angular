@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit{
     this.popupService.popupClosed.subscribe(() => {
       this.dialog.getDialogById('popup-dialog')?.close()
     })
+
+    
   }
 
   ngOnInit(): void {

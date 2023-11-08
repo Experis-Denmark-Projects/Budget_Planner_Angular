@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
 import { catchError, switchMap } from 'rxjs/operators'
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class AuthService {
   idToken:string = ''
   isAuthenticated:boolean = false
   user:User = {};
+  public isAuthenticated$:Observable<boolean>
+  public accessToken$:Observable<string>
   private apiUrl = environment.apiUrl;
 
   public get User(){
@@ -21,6 +24,9 @@ export class AuthService {
   }
 
   constructor(private auth0:Auth0AuthService, private http: HttpClient) { 
+
+    this.isAuthenticated$ = this.auth0.isAuthenticated$
+    this.accessToken$ = this.auth0.getAccessTokenSilently()
 
     this.auth0.isAuthenticated$.subscribe((isAuthenticated) => {
       this.isAuthenticated = isAuthenticated
