@@ -57,14 +57,19 @@ export class BudgetPage implements OnInit {
         return this.userService.updateUser()
       })
     ).subscribe((response:HttpResponse<void>) => {
-      if(response.status === 202){
+      if(response.status === 200){
         this.auth.User = updatedUser
         console.log(`Updated User success`);
       }else {
         // Prompt User that changes could not be made
+        console.log(`Response Status: ${response?.status}`)
         console.log(`Failed to Update user`);
       }
     })
+  }
+
+  getUser(){
+    this.userService.getUser();
   }
 
 }

@@ -2,8 +2,10 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
-import { Observable, map, of, catchError } from 'rxjs'
+import { Observable, map, of, catchError, switchMap, filter } from 'rxjs'
 import { environment } from 'src/environments/environment.development';
+import { User } from '../models/user.model'
+import { Expense } from '../models/expense.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,59 @@ export class UserService {
         });
       })
     );
+  }
+
+  getUser(): void {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    })
+    this.http.get<{}>(`${this.apiUrl}/private/user`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    }).pipe(
+      switchMap((user: any) => {
+        this.auth.User = {...user};
+        return this.http.get<any>(`${this.apiUrl}/private/user/category`, {
+          headers: headers,
+          withCredentials: true,
+          responseType: 'json'
+        })
+      }),
+      map((response:any) => {
+        const categories:Category[] = []
+        response.map((category:any) => {
+          if(category?.categoryId){
+            this.http.get(`${this.apiUrl}/private/user/category/${category?.categoryId}/expense`, {
+              headers: headers,
+              withCredentials: true,
+              responseType: 'json'
+            }).subscribe((expenses:any) => {
+
+              if(Array.isArray(expenses)){
+                expenses.map((expense:any) => {
+                  expense.category = {
+                    category
+                  }
+                })
+              }
+
+              categories.push({
+                ...response,
+                expenses: {
+                  ...expenses
+                }
+              })
+              this.auth.User.categories = categories
+            })
+          }
+        })
+      }),
+      catchError(error => of(new HttpResponse<void>))
+    ).subscribe(() => {
+      console.log(`User Categories: ${this.auth.User.categories?.length}`)
+    });
   }
 
   updateUser(): Observable<HttpResponse<void>>{
