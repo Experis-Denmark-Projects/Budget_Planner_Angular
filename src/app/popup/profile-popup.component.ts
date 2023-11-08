@@ -18,12 +18,18 @@ export class PopupComponent {
     this.popupService.closePopup();
   }
 
+  navigateToProfile(){
+    this.onClose()
+    this.router.navigateByUrl('/profile')
+  }
+
   login(){
+    this.onClose()
     this.auth.login()
   }
 
   logout(){
+    this.onClose()
     this.auth.logout()
   }
-  
 }

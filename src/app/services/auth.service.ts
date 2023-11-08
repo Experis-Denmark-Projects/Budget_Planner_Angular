@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment.development';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
-import { catchError, switchMap, tap} from 'rxjs/operators'
+import { catchError, switchMap } from 'rxjs/operators'
 import { forkJoin, of } from 'rxjs';
 
 @Injectable({
@@ -106,6 +106,7 @@ export class AuthService {
   }
 
   logout(){
+    this.isAuthenticated = false;
     this.auth0.logout({
       logoutParams: {
         returnTo: `${window.location.origin}`

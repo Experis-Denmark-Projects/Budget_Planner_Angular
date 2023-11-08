@@ -10,6 +10,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PopupComponent } from './popup/profile-popup.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ProfilePage } from './pages/profile/profile.page';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     LoginPage,
     BudgetPage,
     NavbarComponent,
-    PopupComponent
+    PopupComponent,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
