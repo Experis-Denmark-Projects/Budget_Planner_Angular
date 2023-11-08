@@ -1,1 +1,17 @@
-<p>profile works!</p>
+<div class="profilePageDiv">
+    <app-navbar></app-navbar>
+   
+    <div class="totalBudgetDiv">
+        <h3 class="headline">Indtast dit totale budget</h3>
+        <form [formGroup]="categoryForm" (ngSubmit)="setTotalBudget()">
+            <!-- Name Div -->
+            <div class="name-div">
+                <app-input [control]="totalBudget"  placeholder="Indtast dit totale budget"/>
+            </div>
+            <button>Sæt total budget</button>
+        </form >
+    </div>
+
+</div>
+
+
