@@ -15,31 +15,59 @@ export class UserService {
   apiUrl:string = environment.apiUrl
   constructor(private readonly http:HttpClient, private readonly auth:AuthService) { }
 
-  addCategoryObservable(category: {}): Observable<HttpResponse<Category>> {
+  
+
+  /***** User Requests *****/
+  
+  getUser(): void {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
 
-    return this.http.post<HttpResponse<Category>>(`${this.apiUrl}/private/user/category`, category, {
+    this.http.get<User>(`${this.apiUrl}/private/user`, {
       headers: headers,
       withCredentials: true,
-      observe: 'response',
       responseType: 'json'
     }).pipe(
-      map(response => {
-        return new HttpResponse<Category>({
-          body: {...response?.body, expenses: []},
-          headers: response?.headers,
-          status: response?.status,
-          statusText: response?.statusText,
-          url: response?.url ?? '',
-        });
+      catchError(error => {
+        // Handle error here, for example, log the error.
+        console.error('Error:', error);
+        // Return an empty User or handle the error as needed.
+        return of(null);
       })
-    );
+    ).subscribe((user: User | null) => {
+      if (user !== null) {
+        this.auth.User = user;
+      }
+    });
   }
 
-  getUser(): void {
+    /***** Categpry Requests *****/
+
+    getCategories(): Observable<Category[]> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${this.auth.accessToken}`,
+        'Content-Type': `application json`
+      });
+  
+      return this.http.get<Category[]>(`${this.apiUrl}/private/user/category`, {
+        headers: headers,
+        withCredentials: true,
+        responseType: 'json'
+      }).pipe(
+        catchError(error => {
+          // Handle error here, for example, log the error.
+          console.error('Error:', error);
+          // Return an empty array or handle the error as needed.
+          return [];
+        })
+      );
+    }
+    /***** Expense Requests *****/
+}
+  
+  /* getUser(): void {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
@@ -90,9 +118,9 @@ export class UserService {
     ).subscribe(() => {
       console.log(`User Categories: ${this.auth.User.categories?.length}`)
     });
-  }
+  } */
 
-  updateUser(): Observable<HttpResponse<void>>{
+  /* updateUser(): Observable<HttpResponse<void>>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
@@ -113,5 +141,49 @@ export class UserService {
         })
       })
     )
-  }
-}
+  } */
+
+
+
+  /* addCategoryObservable(category: {}): Observable<HttpResponse<Category>> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+
+    return this.http.post<HttpResponse<Category>>(`${this.apiUrl}/private/user/category`, category, {
+      headers: headers,
+      withCredentials: true,
+      observe: 'response',
+      responseType: 'json'
+    }).pipe(
+      map(response => {
+        return new HttpResponse<Category>({
+          body: {...response?.body, expenses: []},
+          headers: response?.headers,
+          status: response?.status,
+          statusText: response?.statusText,
+          url: response?.url ?? '',
+        });
+      })
+    );
+  } */
+
+
+
+  /* addExpense(expense:{}): void{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    
+    this.http.post<Expense>(`${this.apiUrl}/private/user/category/expense`, expense, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    }).pipe(
+      map(() => {
+        this.getUser();
+      })
+    ).subscribe(() => {})
+  } */

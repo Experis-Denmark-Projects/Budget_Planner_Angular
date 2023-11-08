@@ -13,6 +13,8 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class BudgetPage implements OnInit {
 
+  categories:Category[] = []
+
   // Form Controls
   name = new FormControl('', [
     Validators.required,
@@ -26,10 +28,13 @@ export class BudgetPage implements OnInit {
   constructor(private readonly userService:UserService, private readonly auth:AuthService){}
 
   ngOnInit(): void {
-      
+    // Fetch User Categories
+    this.userService.getCategories().subscribe((categories:Category[]) => {
+      this.categories = categories;
+    })
   }
   
-  addCategory(){
+  /* addCategory(){
     const category = {
       name: this.categoryForm.value.name as string,
     }
@@ -66,7 +71,7 @@ export class BudgetPage implements OnInit {
         console.log(`Failed to Update user`);
       }
     })
-  }
+  } */
 
   getUser(){
     this.userService.getUser();
