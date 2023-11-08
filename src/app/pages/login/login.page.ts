@@ -13,4 +13,8 @@ export class LoginPage implements OnInit{
   ngOnInit(): void {
       
   }
+
+  login(){
+    this.auth.login()
+  }
 }

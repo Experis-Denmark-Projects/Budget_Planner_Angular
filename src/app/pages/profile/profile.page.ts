@@ -39,7 +39,9 @@ export class ProfilePage {
   constructor(private readonly userService:UserService, private readonly auth:AuthService){}
 
   setTotalBudget(){
-
+     
   }
+
+
 
 }
