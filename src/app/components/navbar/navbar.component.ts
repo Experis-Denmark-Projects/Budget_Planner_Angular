@@ -3,8 +3,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { MatDialog } from '@angular/material/dialog'
 import { PopupComponent } from 'src/app/popup/profile-popup.component';
-import { of } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { catchError, switchMap, of, take, map, throwError } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { HttpResponse } from '@angular/common/http';
+import { User } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-navbar',
@@ -13,32 +15,36 @@ import { catchError } from 'rxjs/operators'
 })
 export class NavbarComponent implements OnInit{
   imageUrl:string = '../../assets/profile-icon.png'
+  private initialized: boolean = false
+  x:number = 0
   
-
-  constructor(public readonly auth:AuthService, private popupService:PopupService, private dialog: MatDialog){
+  constructor(public readonly auth:AuthService, 
+    private popupService:PopupService, 
+    private dialog: MatDialog,
+    private readonly userService:UserService){
     this.popupService.popupClosed.subscribe(() => {
       this.dialog.getDialogById('popup-dialog')?.close()
-    })
-
-    this.auth.accessToken$.pipe(
-      catchError(error => {
-        console.log(`Navbar Access Token Error`)
-        return of()
-      })
-    ).subscribe({
-      next: (accessToken:string) => {
-        if(auth.isAuthenticated){
-            
-        }
-      },
-      error: () => {
-        
-      }
     })
   }
 
   ngOnInit(): void {
-      
+    this.auth.isAuthenticated$.subscribe((isAuthenticated:boolean) => {
+      if(isAuthenticated){
+        this.auth.accessToken$.subscribe((token) => {
+          this.auth.accessToken = token;
+          this.userService.getUserObservable().subscribe({
+            next: (user)=> {
+              console.log(`Username: ${user.body?.username}`)
+            },
+            error:() => {
+              this.userService.postUserObservable().subscribe((user) => {
+                console.log(`Username: ${user.body?.username}`)
+              })
+            }
+          })
+        })
+      }
+    })
   }
 
   openPopup(){

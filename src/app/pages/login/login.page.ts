@@ -11,7 +11,7 @@ export class LoginPage implements OnInit{
   constructor(private readonly auth:AuthService){}
 
   ngOnInit(): void {
-      
+    
   }
 
   login(){

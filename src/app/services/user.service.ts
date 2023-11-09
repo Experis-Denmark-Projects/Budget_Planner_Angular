@@ -15,8 +15,6 @@ export class UserService {
   apiUrl:string = environment.apiUrl
   constructor(private readonly http:HttpClient, private readonly auth:AuthService) { }
 
-  
-
   /***** User Requests *****/
   
   getUser(): void {
@@ -41,6 +39,37 @@ export class UserService {
         this.auth.User = user;
       }
     });
+  }
+
+  getUserObservable():Observable<HttpResponse<User>>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+
+    return this.http.get<HttpResponse<User>>(`${this.apiUrl}/private/user`, {
+      headers: headers,
+      withCredentials: true,
+      observe: 'response',
+      responseType: 'json'
+    }).pipe(
+      map(() => new HttpResponse<User>())
+    )
+  }
+
+  postUserObservable():Observable<HttpResponse<User>>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this. http.post<User>(`${this.apiUrl}/private/user`, {}, {
+      headers: headers,
+      withCredentials: true,
+      observe: 'response',
+      responseType: 'json'
+    }).pipe(
+      map(() => new HttpResponse<User>())
+    )
   }
 
     /***** Categpry Requests *****/

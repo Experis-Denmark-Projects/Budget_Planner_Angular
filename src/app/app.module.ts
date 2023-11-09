@@ -38,7 +38,7 @@ import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
       domain: 'dev-nw60en5uln7ga8bc.us.auth0.com',
       clientId: 'lmLrN3b6iyLrqmQedKT3fAwJbY6rTunQ',
       authorizationParams: {
-        redirect_uri: `${window.location.origin}`,
+        redirect_uri: `${window.location.origin}/budget`,
         audience: `https://budget-planner`
       },
       useRefreshTokensFallback: true,

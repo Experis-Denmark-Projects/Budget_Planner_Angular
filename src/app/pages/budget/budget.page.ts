@@ -29,9 +29,10 @@ export class BudgetPage implements OnInit {
 
   ngOnInit(): void {
     // Fetch User Categories
-    this.userService.getCategories().subscribe((categories:Category[]) => {
+    /* this.userService.getCategories().subscribe((categories:Category[]) => {
       this.categories = categories;
-    })
+    }) */
+    
   }
   
   /* addCategory(){
@@ -73,8 +74,15 @@ export class BudgetPage implements OnInit {
     })
   } */
 
+  logout(){
+    this.auth.logout()
+
+  }
+
   getUser(){
     this.userService.getUser();
   }
 
+
+  addCategory(){}
 }
