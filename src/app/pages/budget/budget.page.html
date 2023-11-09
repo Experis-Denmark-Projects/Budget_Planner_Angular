@@ -11,22 +11,10 @@
     <button>Tilføj nyt felt</button>
 </div>
 
-<div class="budgetPageDiv">
-    
-    <div class="categoriesDiv"  >
-        <h3>
-            category 1
-        </h3>
-        <div>
-            image
-        </div>
-        <div>
-            netflix: 100 kr
-        </div>
-        <div class="totalPriceDiv">
-            Total: 100kr
-        </div>
-    </div>
+<div class="budgetPageDiv" *ngFor="let category of categories">
+    <app-category [category]="category"></app-category>
+
+   
 </div>
 
 <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
@@ -36,6 +24,3 @@
     </div>
     <button>Create Category</button>
 </form >
-
-<button type="button" (click)="getUser()">Get User</button>
-<button (click)="logout()">Logout</button>

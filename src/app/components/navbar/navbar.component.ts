@@ -15,8 +15,6 @@ import { User } from '@auth0/auth0-angular';
 })
 export class NavbarComponent implements OnInit{
   imageUrl:string = '../../assets/profile-icon.png'
-  private initialized: boolean = false
-  x:number = 0
   
   constructor(public readonly auth:AuthService, 
     private popupService:PopupService, 
@@ -30,18 +28,22 @@ export class NavbarComponent implements OnInit{
   ngOnInit(): void {
     this.auth.isAuthenticated$.subscribe((isAuthenticated:boolean) => {
       if(isAuthenticated){
-        this.auth.accessToken$.subscribe((token) => {
-          this.auth.accessToken = token;
-          this.userService.getUserObservable().subscribe({
-            next: (user)=> {
-              console.log(`Username: ${user.body?.username}`)
-            },
-            error:() => {
-              this.userService.postUserObservable().subscribe((user) => {
-                console.log(`Username: ${user.body?.username}`)
-              })
-            }
+        this.auth.isAuthenticated = isAuthenticated
+        this.auth.accessToken$
+        .pipe(
+          switchMap((token) => {
+            this.auth.accessToken = token
+            return this.userService.getUserObservable()
+          }),
+          switchMap((user:User) => {
+            return of(user)
+          }),
+          catchError(error => {
+            return this.userService.postUserObservable()
           })
+        )
+        .subscribe((user) => {
+          this.auth.User = user
         })
       }
     })

@@ -14,6 +14,8 @@ import { ProfilePage } from './pages/profile/profile.page';
 import { InputComponent } from './components/input/input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { CategoryComponent } from './components/category/category.component';
+import { ExpenseComponent } from './components/expense/expense.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
     PopupComponent,
     ProfilePage,
     InputComponent,
+    CategoryComponent,
+    ExpenseComponent,
   ],
   imports: [
     BrowserModule,

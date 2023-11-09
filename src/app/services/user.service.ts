@@ -16,203 +16,166 @@ export class UserService {
   constructor(private readonly http:HttpClient, private readonly auth:AuthService) { }
 
   /***** User Requests *****/
-  
-  getUser(): void {
+  getUserObservable():Observable<User>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
 
-    this.http.get<User>(`${this.apiUrl}/private/user`, {
+    return this.http.get<User>(`${this.apiUrl}/private/user`, {
       headers: headers,
       withCredentials: true,
       responseType: 'json'
-    }).pipe(
-      catchError(error => {
-        // Handle error here, for example, log the error.
-        console.error('Error:', error);
-        // Return an empty User or handle the error as needed.
-        return of(null);
-      })
-    ).subscribe((user: User | null) => {
-      if (user !== null) {
-        this.auth.User = user;
-      }
-    });
+    })
   }
 
-  getUserObservable():Observable<HttpResponse<User>>{
+  postUserObservable():Observable<User>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
-
-    return this.http.get<HttpResponse<User>>(`${this.apiUrl}/private/user`, {
+    return this.http.post<User>(`${this.apiUrl}/private/user`, {}, {
       headers: headers,
       withCredentials: true,
-      observe: 'response',
       responseType: 'json'
-    }).pipe(
-      map(() => new HttpResponse<User>())
-    )
+    })
   }
 
-  postUserObservable():Observable<HttpResponse<User>>{
+  putUserObservable():Observable<User>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
-    return this. http.post<User>(`${this.apiUrl}/private/user`, {}, {
+    return this.http.put<User>(`${this.apiUrl}/private/user`, {}, {
       headers: headers,
       withCredentials: true,
-      observe: 'response',
       responseType: 'json'
-    }).pipe(
-      map(() => new HttpResponse<User>())
-    )
+    })
   }
 
-    /***** Categpry Requests *****/
+  deleteUserObservable():Observable<User>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.delete<User>(`${this.apiUrl}/private/user`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
 
-    getCategories(): Observable<Category[]> {
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.auth.accessToken}`,
-        'Content-Type': `application json`
-      });
-  
-      return this.http.get<Category[]>(`${this.apiUrl}/private/user/category`, {
-        headers: headers,
-        withCredentials: true,
-        responseType: 'json'
-      }).pipe(
-        catchError(error => {
-          // Handle error here, for example, log the error.
-          console.error('Error:', error);
-          // Return an empty array or handle the error as needed.
-          return [];
-        })
-      );
-    }
-    /***** Expense Requests *****/
+
+  /***** Categpry Requests *****/
+  getCategoriesObservable(): Observable<Category[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application json`
+    });
+
+    return this.http.get<Category[]>(`${this.apiUrl}/private/user/category`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  getCategoryObservable(id:number): Observable<Category> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application json`
+    });
+
+    return this.http.get<Category>(`${this.apiUrl}/private/user/category/${id}`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  postCategoryObservable(category:{}):Observable<Category>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.post<Category>(`${this.apiUrl}/private/user/category`, category, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  putCategoryObservable(category:Category):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.put<void>(`${this.apiUrl}/private/user/category/${category.id}`, category, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  deleteCategoryObservable(id:number):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.delete<void>(`${this.apiUrl}/private/user/category/${id}`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  /***** Expense Requests *****/
+  getExpensesObservable(): Observable<Expense[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application json`
+    });
+
+    return this.http.get<Expense[]>(`${this.apiUrl}/private/user/expense`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  postExpenseObservable(expense:Expense):Observable<Expense>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.post<Expense>(`${this.apiUrl}/private/user/category/${expense.category}/expense`, expense, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  putExpenseObservable(expense:Expense):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.put<void>(`${this.apiUrl}/private/user/category/${expense.category}/expense/${expense.id}`, expense, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  deleteExpenseObservable(expense:Expense):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.delete<void>(`${this.apiUrl}/private/user/category/expense/${expense.id}`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
 }
-  
-  /* getUser(): void {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.accessToken}`,
-      'Content-Type': `application/json`,
-    })
-    this.http.get<{}>(`${this.apiUrl}/private/user`, {
-      headers: headers,
-      withCredentials: true,
-      responseType: 'json'
-    }).pipe(
-      switchMap((user: any) => {
-        this.auth.User = {...user};
-        return this.http.get<any>(`${this.apiUrl}/private/user/category`, {
-          headers: headers,
-          withCredentials: true,
-          responseType: 'json'
-        })
-      }),
-      map((response:any) => {
-        const categories:Category[] = []
-        response.map((category:any) => {
-          if(category?.categoryId){
-            this.http.get(`${this.apiUrl}/private/user/category/${category?.categoryId}/expense`, {
-              headers: headers,
-              withCredentials: true,
-              responseType: 'json'
-            }).subscribe((expenses:any) => {
-
-              if(Array.isArray(expenses)){
-                expenses.map((expense:any) => {
-                  expense.category = {
-                    category
-                  }
-                })
-              }
-
-              categories.push({
-                ...response,
-                expenses: {
-                  ...expenses
-                }
-              })
-              this.auth.User.categories = categories
-            })
-          }
-        })
-      }),
-      catchError(error => of(new HttpResponse<void>))
-    ).subscribe(() => {
-      console.log(`User Categories: ${this.auth.User.categories?.length}`)
-    });
-  } */
-
-  /* updateUser(): Observable<HttpResponse<void>>{
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.accessToken}`,
-      'Content-Type': `application/json`,
-    })
-
-    return this.http.put<HttpResponse<void>>(`${this.apiUrl}/private/user`, this.auth.User, {
-      headers: headers,
-      withCredentials: true,
-      responseType: 'json'
-    }).pipe(
-      map(response => {
-        return new HttpResponse<void>({
-          body: response?.body,
-          headers: response?.headers,
-          status: response?.status,
-          statusText: response?.statusText,
-          url: response?.url ?? ''
-        })
-      })
-    )
-  } */
-
-
-
-  /* addCategoryObservable(category: {}): Observable<HttpResponse<Category>> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.accessToken}`,
-      'Content-Type': `application/json`,
-    });
-
-    return this.http.post<HttpResponse<Category>>(`${this.apiUrl}/private/user/category`, category, {
-      headers: headers,
-      withCredentials: true,
-      observe: 'response',
-      responseType: 'json'
-    }).pipe(
-      map(response => {
-        return new HttpResponse<Category>({
-          body: {...response?.body, expenses: []},
-          headers: response?.headers,
-          status: response?.status,
-          statusText: response?.statusText,
-          url: response?.url ?? '',
-        });
-      })
-    );
-  } */
-
-
-
-  /* addExpense(expense:{}): void{
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.accessToken}`,
-      'Content-Type': `application/json`,
-    });
-    
-    this.http.post<Expense>(`${this.apiUrl}/private/user/category/expense`, expense, {
-      headers: headers,
-      withCredentials: true,
-      responseType: 'json'
-    }).pipe(
-      map(() => {
-        this.getUser();
-      })
-    ).subscribe(() => {})
-  } */

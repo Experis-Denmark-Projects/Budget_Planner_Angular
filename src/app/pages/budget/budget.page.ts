@@ -79,10 +79,17 @@ export class BudgetPage implements OnInit {
 
   }
 
-  getUser(){
-    this.userService.getUser();
+  addCategory(){
+    const category = {
+      user: this.auth.User.id,
+      name: this.categoryForm.value.name,
+      expenses: []
+    }
+    this.userService.postCategoryObservable(category).subscribe(
+      ((category:Category) => {
+        this.categories.push(category)
+        console.log(`Called!`)
+      })
+    )
   }
-
-
-  addCategory(){}
 }

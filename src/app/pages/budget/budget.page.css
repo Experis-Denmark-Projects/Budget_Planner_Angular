@@ -15,20 +15,13 @@
     display: grid;
     grid: auto / auto auto auto;
     grid-gap: 10px;
+    padding: 10px;
 }
 
-.budgetPageDiv > div{
+.budgetPageDiv > *{
     text-align: center;
     border: 2px black solid ;
     background-color: lightblue;
     margin: 10px;
 }
 
-.categoriesDiv{
-    background-color: lightblue;
-}
-
-.totalPriceDiv{
-    border-top: 2px black solid ;
-    
-}

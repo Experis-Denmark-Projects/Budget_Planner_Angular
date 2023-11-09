@@ -1,0 +1,17 @@
+<div class="categoriesDiv"  >
+    <h3>
+        {{category.name}}
+    </h3>
+    <div>
+        image
+    </div>
+    <!-- Replace with Expense Component -->
+ 
+    <div *ngFor="let expense of expenses">
+        <app-expense [expense]="expense"></app-expense>
+    </div>
+    
+    <div class="totalPriceDiv">
+        Total: {{total()}}
+    </div>
+</div>
