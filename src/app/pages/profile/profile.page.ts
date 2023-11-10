@@ -11,17 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ProfilePage {
   
-  validNumber(): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} | null => {
-      const value = control.value;
-      if (value === null || value === undefined || value === '') {
-        return null; // Allow empty values
-      }
-      
-      const isValid = /^[0-9]+$/.test(value);
-      return isValid ? null : { invalidNumber: { value: control.value } };
-    };
-  }
+ 
 
 
   user?: User;
@@ -30,7 +20,7 @@ export class ProfilePage {
   totalBudget = new FormControl('', [
     Validators.required,
     Validators.minLength(1),
-    this.validNumber()
+    
   ])
 
   userForm = new FormGroup({

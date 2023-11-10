@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.page.css']
 })
 export class LoginPage implements OnInit{
+  isSmashed:boolean = false;
 
   constructor(private readonly auth:AuthService){}
 
@@ -16,5 +17,14 @@ export class LoginPage implements OnInit{
 
   login(){
     this.auth.login()
+  }
+
+  smash(){
+    if(this.isSmashed==true){
+      this.isSmashed = false
+    }else{
+      this.isSmashed = true
+    }
+
   }
 }
