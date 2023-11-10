@@ -3,12 +3,15 @@
    
     <div class="totalBudgetDiv">
         <h3 class="headline">Indtast dit totale budget</h3>
-        <form [formGroup]="categoryForm" (ngSubmit)="setTotalBudget()">
+        <form [formGroup]="userForm" (ngSubmit)="setTotalBudget()">
             <!-- Name Div -->
             <div class="name-div">
-                <app-input [control]="totalBudget"  placeholder="Indtast dit totale budget"/>
+                <app-input [control]="totalBudget" type="number" placeholder="Indtast dit totale budget"/>
             </div>
             <button>Sæt total budget</button>
+            <div>
+                
+            </div>
         </form >
     </div>
 
