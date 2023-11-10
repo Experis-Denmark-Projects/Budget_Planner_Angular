@@ -41,12 +41,12 @@ export class UserService {
     })
   }
 
-  putUserObservable():Observable<User>{
+  putUserObservable(user:User):Observable<User>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
-    return this.http.put<User>(`${this.apiUrl}/private/user`, {}, {
+    return this.http.put<User>(`${this.apiUrl}/private/user`, user, {
       headers: headers,
       withCredentials: true,
       responseType: 'json'
