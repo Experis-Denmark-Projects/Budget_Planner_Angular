@@ -1,14 +1,15 @@
 <div>
     <h3>{{expense.name}}</h3>
-    <form [formGroup]="expenseForm">
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
         <!-- Name Input -->
         <div>
-            <app-input [control]="name" placeholder="Enter expense name"></app-input>
+            <app-input [control]="name" placeholder="Enter expense name" (blur)="onInputBlur()"></app-input>
         </div>
         <!-- Amount Input -->
         <div>
-            <app-input [control]="amount" placeholder="Enter expense amount"></app-input>
+            <app-input [control]="amount" type="number" placeholder="Enter expense amount" (blur)="onInputBlur()"></app-input>
         </div>
     </form>
-    <button type="button" (click)="delete()">Slet expense</button>
+    <!-- Replace Button with image icon -->
+    <button class="add-expense-button" type="button" (click)=" canDelete ? delete() : add()">{{ canDelete ? 'Delete' : 'OK' }}</button>
 </div>

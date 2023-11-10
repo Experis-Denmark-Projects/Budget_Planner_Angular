@@ -5,14 +5,14 @@
     <div>
         image
     </div>
-    <!-- Replace with Expense Component -->
- 
-    <button (click)="addExpense"></button>
     <div *ngFor="let expense of expenses">
-        <app-expense [expense]="expense" (remove)="onRemoveExpense(expense)"></app-expense>
+        <app-expense [expense]="expense" [canDelete]="true" (remove)="onRemoveExpense(expense)"></app-expense>
     </div>
+    <button type="button" [disabled]="!canAddExpense" (click)="createExpense()">New Expense</button>
     
     <!-- Place New Expense Below -->
+    <ng-container #dynamicComponentContainer></ng-container>
+
 
     <div class="totalPriceDiv">
         Total: {{total()}}

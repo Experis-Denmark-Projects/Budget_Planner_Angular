@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -11,6 +11,11 @@ export class InputComponent implements OnInit{
   @Input() type:string = 'text'
   @Input() placeholder:string = ''
   @Input() format = ''
+  @Output() blur = new EventEmitter<void>()
+
+  onInputBlur(){
+    this.blur.emit()
+  }
 
   constructor(){}
 

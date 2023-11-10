@@ -14,8 +14,8 @@ export class CategoryComponent implements OnInit{
 
   @Input() category: Category = {};
   @Input() expenses: Expense[] = [];
-
-  canAddExpense:boolean = true
+  @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
+  canAddExpense = true
 
   constructor(private userService:UserService, 
               private auth:AuthService,
@@ -26,22 +26,38 @@ export class CategoryComponent implements OnInit{
     
   }
 
+  // Compute Total Expense Amount
   total() {
    return this.expenses.reduce((total, expense) => total + (expense.amount ?? 0), 0);
   }
 
-  addExpense(){
+  // Create New Expense
+  createExpense(){
     const expenseFactory = this.componentFactoryResolver.resolveComponentFactory(ExpenseComponent)
     let dynamicomponentRef: ComponentRef<any>
     dynamicomponentRef = this.viewContainerRef.createComponent(expenseFactory);
-
-    dynamicomponentRef.instance.remove.subscribe((expense:any) => this.onRemoveExpense(expense))
+    this.canAddExpense = false
+    dynamicomponentRef.instance.create.subscribe((expense:Expense) => {
+      if(this.category.id){
+        this.userService.postExpenseObservable({...expense, category: this.category.id}).subscribe((expense:Expense) => {
+          this.expenses.push(expense)
+          dynamicomponentRef.destroy();
+          this.canAddExpense = true
+        })
+      }else{
+        console.log(`No Category Id`)
+      }
+    })
   }
 
   onRemoveExpense(expense:Expense){
     this.userService.deleteExpenseObservable(expense).subscribe({
-      next: () => {},
-      error: () => {}
+      next: () => {
+        this.expenses = this.expenses.filter(item => item.id !== expense.id)
+      },
+      error: () => {
+        console.log('Could not delete expense')
+      }
     })
   }
 }

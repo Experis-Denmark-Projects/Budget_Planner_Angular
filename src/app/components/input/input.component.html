@@ -1,4 +1,4 @@
-<input class="input" [formControl]="control" [type]="type" [placeholder]="placeholder" [mask]="format" [dropSpecialCharacters]="false"/>
+<input class="input" [formControl]="control" [type]="type" [placeholder]="placeholder" [mask]="format" [dropSpecialCharacters]="false" (blur)="onInputBlur()"/>
 <ng-container>
     <!-- Required Field -->
     <p class="red" *ngIf="control.errors?.['required']">

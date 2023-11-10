@@ -160,7 +160,7 @@ export class UserService {
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
-    return this.http.put<void>(`${this.apiUrl}/private/user/category/${expense.category}/expense/${expense.id}`, expense, {
+    return this.http.put<void>(`${this.apiUrl}/private/user/category/${expense.category}/expense`, expense, {
       headers: headers,
       withCredentials: true,
       responseType: 'json'
