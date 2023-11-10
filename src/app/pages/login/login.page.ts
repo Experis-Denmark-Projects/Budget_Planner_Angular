@@ -20,7 +20,11 @@ export class LoginPage implements OnInit{
   }
 
   smash(){
-    this.isSmashed = true
-  
+    if(this.isSmashed==true){
+      this.isSmashed = false
+    }else{
+      this.isSmashed = true
+    }
+
   }
 }
