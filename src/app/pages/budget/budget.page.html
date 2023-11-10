@@ -13,8 +13,6 @@
 
 <div class="budgetPageDiv" *ngFor="let category of categories">
     <app-category [category]="category"></app-category>
-
-   
 </div>
 
 <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">

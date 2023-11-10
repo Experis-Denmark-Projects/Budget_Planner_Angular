@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Expense } from 'src/app/models/expense.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-expense',
@@ -10,11 +11,25 @@ import { Expense } from 'src/app/models/expense.model';
 export class ExpenseComponent {
 
   @Input() expense:Expense = {}
-  @Input() control:FormControl = new FormControl();
-  @Input() type:string = 'text'
-  @Input() placeholder:string = ''
-  @Input() format = ''
+  @Output() remove = new EventEmitter<Expense>()
+
+  name = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2)
+  ])
+
+  amount = new FormControl('', [
+    Validators.required,
+  ])
+
+  expenseForm = new FormGroup({
+    name: this.name,
+    amount: this.amount
+  })
 
   constructor(){}
 
+  delete(){
+    this.remove.emit(this.expense)
+  }
 }

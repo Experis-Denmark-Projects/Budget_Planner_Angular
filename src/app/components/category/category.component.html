@@ -7,10 +7,13 @@
     </div>
     <!-- Replace with Expense Component -->
  
+    <button (click)="addExpense"></button>
     <div *ngFor="let expense of expenses">
-        <app-expense [expense]="expense"></app-expense>
+        <app-expense [expense]="expense" (remove)="onRemoveExpense(expense)"></app-expense>
     </div>
     
+    <!-- Place New Expense Below -->
+
     <div class="totalPriceDiv">
         Total: {{total()}}
     </div>

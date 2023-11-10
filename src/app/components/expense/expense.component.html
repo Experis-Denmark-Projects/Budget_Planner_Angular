@@ -1,3 +1,14 @@
-<h3>{{expense.name}}</h3>
-<app-input></app-input>
-<button>Slet expense</button>
+<div>
+    <h3>{{expense.name}}</h3>
+    <form [formGroup]="expenseForm">
+        <!-- Name Input -->
+        <div>
+            <app-input [control]="name" placeholder="Enter expense name"></app-input>
+        </div>
+        <!-- Amount Input -->
+        <div>
+            <app-input [control]="amount" placeholder="Enter expense amount"></app-input>
+        </div>
+    </form>
+    <button type="button" (click)="delete()">Slet expense</button>
+</div>
