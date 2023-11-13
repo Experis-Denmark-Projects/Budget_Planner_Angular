@@ -1,7 +1,7 @@
 import { Category } from './category.model'
 
 export type User = {
-    id?: number,
+    id: number,
     uid?: string,
     username?: string,
     email?: string,

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http"
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { CategoryComponent } from './components/category/category.component';
 import { ExpenseComponent } from './components/expense/expense.component';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { metaReducers, reducers } from 'src/app/reducers';
+import { EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
+import { entityConfig } from './entity-metadata';
+import { UserDataService } from './services/user-data.service';
+import { User } from './models/user.model';
+import {EffectsModule} from '@ngrx/effects';
+
+const entityMetadata:EntityMetadataMap = {
+  User: {
+    selectId: (user:User) => user.id
+  }
+}
 
 @NgModule({
   declarations: [
@@ -48,11 +63,36 @@ import { ExpenseComponent } from './components/expense/expense.component';
       useRefreshTokensFallback: true,
       cacheLocation: 'localstorage'
     }),
-    BrowserAnimationsModule
+    StoreModule.forRoot(reducers, {
+      metaReducers: metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability:true,
+        strictActionSerializability:true
+      }
+    }),
+    BrowserAnimationsModule,
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
+      routerState: RouterState.Minimal
+    }),
+    EntityDataModule.forRoot(entityConfig)
   ],
   providers: [
-    provideEnvironmentNgxMask()
+    provideEnvironmentNgxMask(),
+    UserDataService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(
+    private eds: EntityDefinitionService,
+    private entity:EntityDataService,
+    private userDataService:UserDataService){
+      eds.registerMetadataMap(entityMetadata)
+      entity.registerService('User', userDataService);
+  }
+}

@@ -3,10 +3,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { MatDialog } from '@angular/material/dialog'
 import { PopupComponent } from 'src/app/popup/profile-popup.component';
-import { catchError, switchMap, of, take, map, throwError } from 'rxjs';
+import { catchError, switchMap, of, take, map, throwError, filter } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { HttpResponse } from '@angular/common/http';
-import { User } from '@auth0/auth0-angular';
+import { User } from 'src/app/models/user.model';
+import { UserDataService } from 'src/app/services/user-data.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-navbar',
@@ -15,11 +17,12 @@ import { User } from '@auth0/auth0-angular';
 })
 export class NavbarComponent implements OnInit{
   imageUrl:string = '../../assets/profile-icon.png'
-  
+
   constructor(public readonly auth:AuthService, 
     private popupService:PopupService, 
     private dialog: MatDialog,
-    private readonly userService:UserService){
+    private readonly userDataService:UserDataService,
+    private store:Store){
     this.popupService.popupClosed.subscribe(() => {
       this.dialog.getDialogById('popup-dialog')?.close()
     })
@@ -30,23 +33,19 @@ export class NavbarComponent implements OnInit{
       if(isAuthenticated){
         this.auth.isAuthenticated = isAuthenticated
         this.auth.accessToken$
-        .pipe(
-          switchMap((token) => {
-            this.auth.accessToken = token
-            return this.userService.getUserObservable()
-          }),
-          switchMap((user:User) => {
-            return of(user)
-          }),
-          catchError(error => {
-            return this.userService.postUserObservable()
-          })
-        )
-        .subscribe((user) => {
-          this.auth.User = user
+        .subscribe((token:string) => {
+          this.auth.accessToken = token
+          this.userDataService.get({}).pipe(
+            catchError(() => this.userDataService.add({id:-1}))
+        ).subscribe({
+          next: (user:User) => {
+            this.auth.User = user
+            
+          }
+        })
         })
       }
-    })
+    })    
   }
 
   openPopup(){

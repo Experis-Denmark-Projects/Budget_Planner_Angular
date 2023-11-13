@@ -14,7 +14,7 @@ export class AuthService {
   accessToken:string = ''
   idToken:string = ''
   isAuthenticated:boolean = false
-  private user:User = {};
+  private user:User = {id:-1};
   public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
   private apiUrl = environment.apiUrl;
