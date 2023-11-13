@@ -3,6 +3,7 @@
    
 
 
+
     <div class="totalBudgetDiv">
         <h3 class="headline">Indtast dit totale budget</h3>
         <form [formGroup]="userForm" (ngSubmit)="setTotalBudget()">
@@ -15,6 +16,9 @@
                 
             </div>
         </form >
+        
+        <app-charts></app-charts>
+
     </div>
 
 </div>

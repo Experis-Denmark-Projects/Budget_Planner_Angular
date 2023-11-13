@@ -25,6 +25,9 @@ import { entityConfig } from './entity-metadata';
 import { UserDataService } from './services/user-data.service';
 import { User } from './models/user.model';
 import {EffectsModule} from '@ngrx/effects';
+import { ChartsComponent } from './components/charts/charts.component';
+
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 const entityMetadata:EntityMetadataMap = {
   User: {
@@ -43,6 +46,7 @@ const entityMetadata:EntityMetadataMap = {
     InputComponent,
     CategoryComponent,
     ExpenseComponent,
+    ChartsComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,7 @@ const entityMetadata:EntityMetadataMap = {
     HttpClientModule,
     HttpClientJsonpModule,
     MatDialogModule,
+    CanvasJSAngularChartsModule,
     AuthModule.forRoot({
       domain: 'dev-nw60en5uln7ga8bc.us.auth0.com',
       clientId: 'lmLrN3b6iyLrqmQedKT3fAwJbY6rTunQ',
@@ -72,14 +77,18 @@ const entityMetadata:EntityMetadataMap = {
         strictActionSerializability:true
       }
     }),
+    
     BrowserAnimationsModule,
+    
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState: RouterState.Minimal
     }),
-    EntityDataModule.forRoot(entityConfig)
+    EntityDataModule.forRoot(entityConfig),
+    
+    
   ],
   providers: [
     provideEnvironmentNgxMask(),
