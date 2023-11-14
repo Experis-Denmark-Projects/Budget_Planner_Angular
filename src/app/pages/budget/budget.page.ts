@@ -14,7 +14,6 @@ import { Observable } from 'rxjs'
 export class BudgetPage implements OnInit {
 
   categories:Category[] = []
-  categories$:Observable<Category[]>
   budgetRemainder:number = 0
   // Form Controls
   name = new FormControl('', [
@@ -28,23 +27,14 @@ export class BudgetPage implements OnInit {
 
   constructor(
     public readonly categoryService:CategoryService,
-    public readonly auth:AuthService){
-      this.categories$ = this.categoryService.getCategoriesObservable()
-    }
+    public readonly auth:AuthService){}
 
   ngOnInit(): void {
-    // Fetch User Categories
-    this.auth.loggedIn$.subscribe(() => {
-      this.categoryService.getCategoriesObservable().subscribe((categories:Category[]) => {
-        this.categories = categories;
-      })
-    })
-
-    this.categories$ = this.categoryService.getCategoriesObservable()
+    // On LoginWithRedirect this component is rendered before http requests are done fethcing.
+    // Do not call categories get request if the user has not been fetched and set yet. 
   }
 
   addCategory(){
-    console.log(`${this.auth.User.id}`)
     const category = {
       user: this.auth.User.id,
       name: this.categoryForm.value.name,
@@ -52,7 +42,7 @@ export class BudgetPage implements OnInit {
     }
     this.categoryService.postCategoryObservable(category).subscribe(
       ((category:Category) => {
-        this.categories.push(category)
+        this.categoryService.categories.push(category)
       })
     )
   }

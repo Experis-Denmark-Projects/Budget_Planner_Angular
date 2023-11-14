@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit{
           })
         ).subscribe((user:User) => {
           this.auth.User = user
-          this.auth.loggedIn$.next()
+          this.auth.user$.next(user)
         })
       }
     })

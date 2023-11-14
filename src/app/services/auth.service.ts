@@ -14,7 +14,7 @@ export class AuthService {
   accessToken:string = ''
   idToken:string = ''
   isAuthenticated:boolean = false
-  private user:User = {id:-1};
+  private user:User = {}
   public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
   public user$:Subject<User> = new Subject<User>

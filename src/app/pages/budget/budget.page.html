@@ -9,10 +9,8 @@
     <button>Tilføj nyt felt</button>
 </div>
 
-<div *ngIf="((auth.accessToken$|async) && (auth.isAuthenticated$ | async))">
-    <div class="budgetPageDiv" *ngFor="let category of categories$ | async">
-        <app-category [category]="category"></app-category>
-    </div>
+<div class="budgetPageDiv" *ngFor="let category of categoryService.categories">
+    <app-category [category]="category"></app-category>
 </div>
 
 <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">

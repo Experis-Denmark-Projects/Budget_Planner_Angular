@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
 import { Expense } from '../models/expense.model';
 import { filter, switchMap } from 'rxjs/operators'
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,18 @@ import { filter, switchMap } from 'rxjs/operators'
 export class CategoryService{
 
   apiUrl:string = environment.apiUrl
+
+  categories:Category[] = []
+
   constructor(private readonly http:HttpClient, private readonly auth:AuthService) { 
 
-    auth.accessToken$.subscribe((token) => {
-      this.auth.accessToken = token;
+    auth.user$.subscribe((user:User) => {
+      if(user.id){
+        this.getCategoriesObservable()
+        .subscribe((categories:Category[]) => {
+          this.categories = categories
+      })
+      }
     })
   }
   

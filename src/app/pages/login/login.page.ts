@@ -16,6 +16,7 @@ export class LoginPage implements OnInit{
   }
 
   login(){
+    this.auth.loggedIn$.next()
     this.auth.login()
   }
 

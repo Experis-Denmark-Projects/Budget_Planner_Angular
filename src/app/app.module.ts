@@ -92,10 +92,6 @@ import { CategoryService } from './services/category.service';
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  constructor(
-    private eds: EntityDefinitionService,
-    private entity:EntityDataService,
-    private userDataService:UserDataService){
-      //eds.registerMetadataMap(entityConfig.entityMetadata)
+  constructor(){
   }
 }
