@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginPage implements OnInit{
   isSmashed:boolean = false;
 
-  constructor(private readonly auth:AuthService){}
+  constructor(public readonly auth:AuthService){}
 
   ngOnInit(): void {
     

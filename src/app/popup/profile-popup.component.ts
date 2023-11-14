@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { PopupService } from '../services/popup.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-popup',

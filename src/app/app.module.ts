@@ -1,6 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http"
+import { HttpClientModule, HttpClientJsonpModule, provideHttpClient } from "@angular/common/http"
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from '@auth0/auth0-angular';
@@ -16,24 +16,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { CategoryComponent } from './components/category/category.component';
 import { ExpenseComponent } from './components/expense/expense.component';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, provideStore } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { metaReducers, reducers } from 'src/app/reducers';
-import { EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
+import { DefaultDataServiceConfig, EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap, provideEntityData, withEffects } from '@ngrx/data';
 import { entityConfig } from './entity-metadata';
 import { UserDataService } from './services/user-data.service';
-import { User } from './models/user.model';
 import {EffectsModule} from '@ngrx/effects';
 import { ChartsComponent } from './components/charts/charts.component';
-
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
-
-const entityMetadata:EntityMetadataMap = {
-  User: {
-    selectId: (user:User) => user.id
-  }
-}
+import { UserEntityService } from './services/user-entity.service';
+import { provideEffects } from '@ngrx/effects';
+import { environment } from 'src/environments/environment.development';
 
 @NgModule({
   declarations: [
@@ -68,18 +63,16 @@ const entityMetadata:EntityMetadataMap = {
       useRefreshTokensFallback: true,
       cacheLocation: 'localstorage'
     }),
-    StoreModule.forRoot(reducers, {
-      metaReducers: metaReducers,
+    StoreModule.forRoot(reducers,{
+      metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
-        strictStateSerializability:true,
-        strictActionSerializability:true
+        strictActionSerializability: true,
+        strictStateSerializability:true
       }
     }),
-    
     BrowserAnimationsModule,
-    
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({
@@ -87,12 +80,11 @@ const entityMetadata:EntityMetadataMap = {
       routerState: RouterState.Minimal
     }),
     EntityDataModule.forRoot(entityConfig),
-    
-    
   ],
   providers: [
     provideEnvironmentNgxMask(),
-    UserDataService
+    UserDataService,
+    UserEntityService,
   ],
   bootstrap: [AppComponent]
 })
@@ -101,7 +93,7 @@ export class AppModule {
     private eds: EntityDefinitionService,
     private entity:EntityDataService,
     private userDataService:UserDataService){
-      eds.registerMetadataMap(entityMetadata)
+      //eds.registerMetadataMap(entityConfig.entityMetadata)
       entity.registerService('User', userDataService);
   }
 }

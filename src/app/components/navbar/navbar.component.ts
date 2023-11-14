@@ -3,12 +3,13 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { MatDialog } from '@angular/material/dialog'
 import { PopupComponent } from 'src/app/popup/profile-popup.component';
-import { catchError, switchMap, of, take, map, throwError, filter } from 'rxjs';
-import { UserService } from 'src/app/services/user.service';
-import { HttpResponse } from '@angular/common/http';
+import { catchError, switchMap, of, take, map, throwError, filter, Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { UserDataService } from 'src/app/services/user-data.service';
-import { Store } from '@ngrx/store';
+import { UserEntityService } from 'src/app/services/user-entity.service';
+import { first, tap } from 'rxjs/operators'
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -17,12 +18,12 @@ import { Store } from '@ngrx/store';
 })
 export class NavbarComponent implements OnInit{
   imageUrl:string = '../../assets/profile-icon.png'
-
-  constructor(public readonly auth:AuthService, 
+  constructor(
+    public router:Router,
+    public readonly auth:AuthService, 
     private popupService:PopupService, 
     private dialog: MatDialog,
-    private readonly userDataService:UserDataService,
-    private store:Store){
+    private readonly userService:UserService){
     this.popupService.popupClosed.subscribe(() => {
       this.dialog.getDialogById('popup-dialog')?.close()
     })
@@ -31,18 +32,15 @@ export class NavbarComponent implements OnInit{
   ngOnInit(): void {
     this.auth.isAuthenticated$.subscribe((isAuthenticated:boolean) => {
       if(isAuthenticated){
-        this.auth.isAuthenticated = isAuthenticated
-        this.auth.accessToken$
-        .subscribe((token:string) => {
-          this.auth.accessToken = token
-          this.userDataService.get({}).pipe(
-            catchError(() => this.userDataService.add({id:-1}))
-        ).subscribe({
-          next: (user:User) => {
-            this.auth.User = user
-            
-          }
-        })
+        this.auth.accessToken$.subscribe((token:string) => {
+          this.auth.accessToken = token;
+
+          this.userService.getUserObservable().pipe(
+            catchError(error => this.userService.postUserObservable())
+          ).subscribe((user:User) => {
+            this.auth.User = user;
+          })
+          
         })
       }
     })    

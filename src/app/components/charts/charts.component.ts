@@ -9,9 +9,10 @@ export class ChartsComponent {
   
   
   categories = [
-    { name: "Category1", totalPrice: 150 },
+    { name: "Category1", totalPrice: 300 },
     { name: "Category2", totalPrice: 150 },
     { name: "Category3", totalPrice: 150 },
+    { name: "Category4", totalPrice: 150 },
     
   ];
 

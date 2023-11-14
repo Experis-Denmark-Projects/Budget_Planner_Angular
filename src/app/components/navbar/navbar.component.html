@@ -1,7 +1,7 @@
 <header class="headerDiv">
-    <img class="logo" src="../../assets/budgetPlanner.svg" alt="">
+    <img class="logo" src="../../assets/budgetPlanner.svg" alt="" (click)="router.navigateByUrl('/')">
     <div class="profile-button">
-        <p>{{ auth.User.username }}</p>
+        <p> {{ auth.User.username }}</p>
         <img [src]="imageUrl" alt="" (click)="openPopup()"/>
     </div>
 </header>

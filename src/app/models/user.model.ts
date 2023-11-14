@@ -1,5 +1,3 @@
-import { Category } from './category.model'
-
 export type User = {
     id: number,
     uid?: string,

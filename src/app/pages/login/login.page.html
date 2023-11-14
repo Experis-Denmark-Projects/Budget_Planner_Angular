@@ -1,13 +1,10 @@
 
 <div class="profileDiv">
     <app-navbar />
-
-
-
     <div class="loginDiv">
         <img class="logo" src="../../assets/budgetPlanner.svg" alt="">
         <h3>Login eller registerer dig for få et overblik over dit budget</h3>
-        <button (click)="login()">Login</button>
+        <button *ngIf="!(auth.isAuthenticated$ | async)" (click)="login()">Login</button>
     </div>
 
     <div class="smash">
@@ -16,6 +13,4 @@
         </div>
         <button (click)="smash()">Press for smash</button>
     </div>
-
-
 </div>

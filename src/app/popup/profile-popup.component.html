@@ -4,6 +4,8 @@
     <button (click)="navigateToProfile()">Profile</button>
     <!-- Budget Nativation Button-->
     <button (click)="navigateToBudget()">Budget</button>
-    <!-- Sign In / Out Button -->
-    <button (click)="auth.isAuthenticated ? logout() : login()">{{ auth.isAuthenticated ? 'Logout' : 'Login' }}</button>
+    <!-- Sign In Button -->
+    <button *ngIf="!(auth.isAuthenticated$ | async)" (click)="login()">{{ 'Login' }}</button>
+    <!-- Sign Out Button -->
+    <button *ngIf="auth.isAuthenticated$ | async" (click)="logout()">{{ 'Logout'}}</button>
 </div>
