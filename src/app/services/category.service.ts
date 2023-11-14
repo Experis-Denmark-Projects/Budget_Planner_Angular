@@ -94,13 +94,13 @@ export class CategoryService{
   }
 
   /***** Expense Requests *****/
-  getExpensesObservable(): Observable<Expense[]> {
+  getExpensesObservable(id:number): Observable<Expense[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application json`
     });
 
-    return this.http.get<Expense[]>(`${this.apiUrl}/private/user/expense`, {
+    return this.http.get<Expense[]>(`${this.apiUrl}/private/user/category/${id}/expense`, {
       headers: headers,
       withCredentials: true,
       responseType: 'json'
