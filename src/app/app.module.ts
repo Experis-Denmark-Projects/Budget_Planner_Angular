@@ -29,6 +29,8 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { UserEntityService } from './services/user-entity.service';
 import { provideEffects } from '@ngrx/effects';
 import { environment } from 'src/environments/environment.development';
+import { UserService } from './services/user.service';
+import { CategoryService } from './services/category.service';
 
 @NgModule({
   declarations: [
@@ -83,8 +85,9 @@ import { environment } from 'src/environments/environment.development';
   ],
   providers: [
     provideEnvironmentNgxMask(),
-    UserDataService,
-    UserEntityService,
+    UserService,
+    CategoryService,
+    UserDataService
   ],
   bootstrap: [AppComponent]
 })
@@ -94,6 +97,5 @@ export class AppModule {
     private entity:EntityDataService,
     private userDataService:UserDataService){
       //eds.registerMetadataMap(entityConfig.entityMetadata)
-      entity.registerService('User', userDataService);
   }
 }

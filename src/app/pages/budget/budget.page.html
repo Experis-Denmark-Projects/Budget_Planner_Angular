@@ -2,10 +2,10 @@
 
 <div class="budgetBar">
     <div class="budgetItem">
-        Total Budget: 1000kr
+        Total Budget: {{auth.User.totalBudget}}kr.
     </div>
     <div class="budgetItem">
-        Resterende Budget: 900 kr
+        Resterende Budget: {{budgetRemainder}} kr
     </div>
 
     <button>Tilføj nyt felt</button>

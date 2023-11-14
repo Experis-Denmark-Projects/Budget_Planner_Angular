@@ -30,21 +30,28 @@ export class NavbarComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.auth.isAuthenticated$.subscribe((isAuthenticated:boolean) => {
-      if(isAuthenticated){
-        this.auth.accessToken$.subscribe((token:string) => {
-          this.auth.accessToken = token;
-
-          this.userService.getUserObservable().pipe(
-            catchError(error => this.userService.postUserObservable())
-          ).subscribe((user:User) => {
-            this.auth.User = user;
-          })
-          
-        })
+    this.auth.isAuthenticated$.pipe(
+      filter((isAuthenticated: boolean) => isAuthenticated), // Only proceed if authenticated
+      switchMap(() => this.auth.accessToken$), // Get the access token
+      filter((token: string) => !!token), // Only proceed if the access token is not empty
+      tap((token: string) => {
+        this.auth.accessToken = token;
+      }),
+      switchMap(() => this.userService.getUserObservable().pipe(
+        catchError(error => this.userService.postUserObservable())
+      ))
+    ).subscribe(
+      (user: User) => {
+        this.auth.User = user;
+        this.router.navigateByUrl('/budget')
+        // Any additional logic you want to perform after the user is obtained
+      },
+      (error) => {
+        // Handle errors
       }
-    })    
+    );
   }
+  
 
   openPopup(){
     this.popupService.openPopup();

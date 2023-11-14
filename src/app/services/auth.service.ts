@@ -17,7 +17,6 @@ export class AuthService {
   private user:User = {id:-1};
   public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
-  private apiUrl = environment.apiUrl;
 
   public get User(){
     return this.user
@@ -36,7 +35,7 @@ export class AuthService {
   login() {
     this.auth0.loginWithRedirect({
       appState: {
-        target: '/budget'
+        //target: '/budget'
       }
     })
     .subscribe({

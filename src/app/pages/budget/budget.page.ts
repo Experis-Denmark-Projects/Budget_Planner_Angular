@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/category.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { switchMap, filter } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
+import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
   selector: 'app-budget',
@@ -14,7 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 export class BudgetPage implements OnInit {
 
   categories:Category[] = []
-
+  budgetRemainder:number = 0
   // Form Controls
   name = new FormControl('', [
     Validators.required,
@@ -25,58 +23,18 @@ export class BudgetPage implements OnInit {
     name: this.name
   })
 
-  constructor(private readonly userService:UserService, private readonly auth:AuthService){}
+  constructor(
+    public readonly categoryService:CategoryService,
+    public readonly auth:AuthService){}
 
   ngOnInit(): void {
     // Fetch User Categories
-    /* this.userService.getCategories().subscribe((categories:Category[]) => {
-      this.categories = categories;
-    }) */
-    
-  }
-  
-  /* addCategory(){
-    const category = {
-      name: this.categoryForm.value.name as string,
-    }
-
-    const updatedUser = {...this.auth.User}
-    
-    this.userService.addCategoryObservable({
-      ...category,
-      user: this.auth.User.id
-    }).pipe(
-      switchMap(() => {
-        return this.userService.addCategoryObservable(category);
-      }),
-      filter(response => {
-        if(response.status === 200){
-          console.log(`Create category success`);
-          return true
-        }else{
-          // Prompt User that category could not be created
-          console.log(`Failed to create category \nResponse Status: ${response.status}`);
-          return false
-        }
-      }),
-      switchMap(() => {
-        return this.userService.updateUser()
+    this.auth.accessToken$.subscribe((token) => {
+      this.auth.accessToken = token;
+      this.categoryService.getCategoriesObservable().subscribe((categories:Category[]) => {
+        this.categories = categories;
       })
-    ).subscribe((response:HttpResponse<void>) => {
-      if(response.status === 200){
-        this.auth.User = updatedUser
-        console.log(`Updated User success`);
-      }else {
-        // Prompt User that changes could not be made
-        console.log(`Response Status: ${response?.status}`)
-        console.log(`Failed to Update user`);
-      }
     })
-  } */
-
-  logout(){
-    this.auth.logout()
-
   }
 
   addCategory(){
@@ -85,10 +43,9 @@ export class BudgetPage implements OnInit {
       name: this.categoryForm.value.name,
       expenses: []
     }
-    this.userService.postCategoryObservable(category).subscribe(
+    this.categoryService.postCategoryObservable(category).subscribe(
       ((category:Category) => {
         this.categories.push(category)
-        console.log(`Called!`)
       })
     )
   }

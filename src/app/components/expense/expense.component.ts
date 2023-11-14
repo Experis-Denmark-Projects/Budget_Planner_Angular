@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Expense } from 'src/app/models/expense.model';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
+import { CategoryService } from 'src/app/services/category.service';
+
 
 @Component({
   selector: 'app-expense',
@@ -30,7 +30,7 @@ export class ExpenseComponent implements OnInit{
     amount: this.amount
   })
 
-  constructor(private userService:UserService){}
+  constructor(private categoryService:CategoryService){}
 
   ngOnInit(): void {
       this.synchronizeExpenseFormWithInputValues()
@@ -40,7 +40,7 @@ export class ExpenseComponent implements OnInit{
     
     if(this.expenseForm.value && this.expenseForm.value.name && this.expenseForm.value.amount){
       const updatedExpense = {...this.expense, name: this.expenseForm.value.name, amount: this.expenseForm.value.amount}
-      this.userService.putExpenseObservable(updatedExpense)
+      this.categoryService.putExpenseObservable(updatedExpense)
       .subscribe({
         next: () => {
           // Prompt user that the changes has been made
