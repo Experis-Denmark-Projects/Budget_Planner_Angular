@@ -11,5 +11,5 @@
         </div>
     </form>
     <!-- Replace Button with image icon -->
-    <button class="add-expense-button" type="button" (click)=" canDelete ? delete() : add()">{{ canDelete ? 'Delete' : 'OK' }}</button>
+    <button class="add-expense-button" [disabled]="expenseForm.invalid" type="button" (click)=" canDelete ? delete() : add()">{{ canDelete ? 'Delete' : 'OK' }}</button>
 </div>

@@ -1,0 +1,3 @@
+.add-expense-button:disabled{
+    opacity: 50;
+}

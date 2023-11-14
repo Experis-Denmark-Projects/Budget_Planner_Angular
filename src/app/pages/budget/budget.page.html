@@ -18,5 +18,5 @@
     <div class="name-div">
         <app-input [control]="name" placeholder="Enter category name"/>
     </div>
-    <button>Create Category</button>
+    <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
 </form >

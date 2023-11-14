@@ -25,3 +25,6 @@
     margin: 10px;
 }
 
+.create-category-button:hover{
+    opacity: 50;
+}
