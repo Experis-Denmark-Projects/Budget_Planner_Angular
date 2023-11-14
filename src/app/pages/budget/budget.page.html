@@ -1,5 +1,3 @@
-<app-navbar />
-
 <div class="budgetBar">
     <div class="budgetItem">
         Total Budget: {{auth.User.totalBudget}}kr.
@@ -11,8 +9,10 @@
     <button>Tilføj nyt felt</button>
 </div>
 
-<div class="budgetPageDiv" *ngFor="let category of categories">
-    <app-category [category]="category"></app-category>
+<div *ngIf="((auth.accessToken$|async) && (auth.isAuthenticated$ | async))">
+    <div class="budgetPageDiv" *ngFor="let category of categories$ | async">
+        <app-category [category]="category"></app-category>
+    </div>
 </div>
 
 <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">

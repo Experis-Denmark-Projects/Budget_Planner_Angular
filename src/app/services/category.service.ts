@@ -10,10 +10,15 @@ import { filter, switchMap } from 'rxjs/operators'
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class CategoryService{
 
   apiUrl:string = environment.apiUrl
-  constructor(private readonly http:HttpClient, private readonly auth:AuthService) { }
+  constructor(private readonly http:HttpClient, private readonly auth:AuthService) { 
+
+    auth.accessToken$.subscribe((token) => {
+      this.auth.accessToken = token;
+    })
+  }
   
   /***** Categpry Requests *****/
   getCategoriesObservable(): Observable<Category[]> {

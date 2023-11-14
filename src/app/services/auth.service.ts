@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
 import { catchError, switchMap } from 'rxjs/operators'
-import { forkJoin, of, Observable } from 'rxjs';
+import { forkJoin, of, Observable, Subject } from 'rxjs';
 
 
 @Injectable({
@@ -17,7 +17,8 @@ export class AuthService {
   private user:User = {id:-1};
   public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
-
+  public user$:Subject<User> = new Subject<User>
+  public loggedIn$: Subject<void> = new Subject<void>
   public get User(){
     return this.user
   }
@@ -35,11 +36,9 @@ export class AuthService {
   login() {
     this.auth0.loginWithRedirect({
       appState: {
-        //target: '/budget'
+        target: '/budget'
       }
     })
-    .subscribe({
-    });
   }
 
   logout(){
