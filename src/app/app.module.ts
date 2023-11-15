@@ -19,7 +19,7 @@ import { ExpenseComponent } from './components/expense/expense.component';
 import { StoreModule, provideStore } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
-import { metaReducers, reducers } from 'src/app/reducers';
+import { metaReducers, reducers } from 'src/app/redux';
 import { DefaultDataServiceConfig, EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap, provideEntityData, withEffects } from '@ngrx/data';
 import { entityConfig } from './entity-metadata';
 import { UserDataService } from './services/user-data.service';
@@ -86,8 +86,7 @@ import { CategoryService } from './services/category.service';
   providers: [
     provideEnvironmentNgxMask(),
     UserService,
-    CategoryService,
-    UserDataService
+    CategoryService
   ],
   bootstrap: [AppComponent]
 })

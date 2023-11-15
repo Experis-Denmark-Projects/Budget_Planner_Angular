@@ -5,11 +5,12 @@ import { MatDialog } from '@angular/material/dialog'
 import { PopupComponent } from 'src/app/popup/profile-popup.component';
 import { catchError, switchMap, of, take, map, throwError, filter, Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { UserDataService } from 'src/app/services/user-data.service';
-import { UserEntityService } from 'src/app/services/user-entity.service';
 import { first, tap } from 'rxjs/operators'
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { AppState } from '@auth0/auth0-angular';
+import {Store} from "@ngrx/store";
+import { login } from 'src/app/redux/actions/user.actions';
 
 @Component({
   selector: 'app-navbar',
@@ -18,12 +19,14 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit{
   imageUrl:string = '../../assets/profile-icon.png'
+  token:string = ''
   constructor(
     public router:Router,
     public readonly auth:AuthService, 
     private popupService:PopupService, 
     private dialog: MatDialog,
-    private readonly userService:UserService){
+    private readonly userService:UserService,
+    private store:Store<AppState>){
     this.popupService.popupClosed.subscribe(() => {
       this.dialog.getDialogById('popup-dialog')?.close()
     })
@@ -35,6 +38,7 @@ export class NavbarComponent implements OnInit{
         this.auth.isAuthenticated = isAuthenticated
         this.auth.accessToken$.pipe(
           switchMap((token:string) => {
+            this.token = token
             this.auth.accessToken = token
             return this.userService.getUserObservable().pipe(
               catchError(error => this.userService.postUserObservable())
@@ -42,6 +46,11 @@ export class NavbarComponent implements OnInit{
           })
         ).subscribe((user:User) => {
           this.auth.User = user
+          this.store.dispatch(login({
+            isAuthenticated: true,
+            accessToken: this.token,
+            user: user
+          }))
           this.auth.user$.next(user)
         })
       }

@@ -19,9 +19,10 @@ export class CategoryComponent implements OnInit{
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   canAddExpense = true
 
-  constructor(private categoryService:CategoryService,
-              private componentFactoryResolver:ComponentFactoryResolver,
-              private viewContainerRef:ViewContainerRef){}
+  constructor(
+    private categoryService:CategoryService,
+    private componentFactoryResolver:ComponentFactoryResolver,
+    private viewContainerRef:ViewContainerRef){}
 
   ngOnInit(){
     

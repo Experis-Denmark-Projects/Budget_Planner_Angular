@@ -5,7 +5,9 @@ import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
 import { catchError, switchMap } from 'rxjs/operators'
 import { forkJoin, of, Observable, Subject } from 'rxjs';
-
+import { Store } from '@ngrx/store';
+import { logout } from '../redux/actions/user.actions';
+import { AppState } from '../redux';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,7 @@ export class AuthService {
     this.user = value
   }
 
-  constructor(private auth0:Auth0AuthService, private http: HttpClient) { 
+  constructor(private auth0:Auth0AuthService, private http: HttpClient, private store:Store<AppState>) { 
 
     this.isAuthenticated$ = this.auth0.isAuthenticated$
     this.accessToken$ = this.auth0.getAccessTokenSilently()
@@ -43,6 +45,7 @@ export class AuthService {
 
   logout(){
     this.isAuthenticated = false;
+    this.store.dispatch(logout())
     this.auth0.logout({
       logoutParams: {
         returnTo: `${window.location.origin}`
