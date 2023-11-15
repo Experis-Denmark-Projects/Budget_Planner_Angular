@@ -31,6 +31,7 @@ import { provideEffects } from '@ngrx/effects';
 import { environment } from 'src/environments/environment.development';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
+import { NewChartsComponent } from './components/new-charts/new-charts.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CategoryService } from './services/category.service';
     CategoryComponent,
     ExpenseComponent,
     ChartsComponent,
+    NewChartsComponent,
   ],
   imports: [
     BrowserModule,
