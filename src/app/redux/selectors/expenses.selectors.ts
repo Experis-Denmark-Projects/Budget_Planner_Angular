@@ -3,7 +3,7 @@ import { ExpensesState } from '../reducers/expenses.reducer';
 
 export const selectExpensesState = createFeatureSelector<ExpensesState>('expenses');
 
-export const selectExpenses = (id:number) => createSelector(selectExpensesState, (state) => state.expenses.filter(expense => expense.id === id))
+export const selectExpenses = (id:number) => createSelector(selectExpensesState, (state) => state.expenses.filter(expense => expense.category === id))
 
 export const categoryTotalExpense = (id:number) => createSelector(
     selectExpenses(id),

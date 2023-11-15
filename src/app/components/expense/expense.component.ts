@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { AppState } from '@auth0/auth0-angular';
+import { Store } from '@ngrx/store';
 import { Expense } from 'src/app/models/expense.model';
+import { updateExpense } from 'src/app/redux/actions/expenses.actions';
 import { CategoryService } from 'src/app/services/category.service';
 
 
@@ -30,7 +33,8 @@ export class ExpenseComponent implements OnInit{
     amount: this.amount
   })
 
-  constructor(private categoryService:CategoryService){}
+  constructor(
+    private categoryService:CategoryService, private store:Store<AppState>){}
 
   ngOnInit(): void {
       this.synchronizeExpenseFormWithInputValues()
@@ -45,6 +49,7 @@ export class ExpenseComponent implements OnInit{
         next: () => {
           // Prompt user that the changes has been made
           this.expense = updatedExpense
+          this.store.dispatch(updateExpense({expense:updatedExpense}))
         },
         error: () => {
           // Prompt user that changes could not be made

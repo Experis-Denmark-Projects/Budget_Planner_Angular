@@ -13,15 +13,33 @@ export const initialExpensesState: ExpensesState = {
 export const expensesReducer = createReducer(
     initialExpensesState,
 
-    on(ExpensesActions.getExpenses, (state, action) => {
-        return {
-            expenses: state.expenses
-        }
-    }),
-
     on(ExpensesActions.setExpenses, (state, action) => {
         return {
             expenses: action.expenses
         }
-    })
+    }),
+
+    on(ExpensesActions.addExpense, (state, action) => {
+        return {
+            expenses: [...state.expenses, action.expense]
+        }
+    }),
+
+    on(ExpensesActions.updateExpense, (state, action) => {
+        return {
+            expenses: state.expenses.map(expense => expense.id === action.expense.id ? action.expense : expense)
+        }
+    }),
+
+    on(ExpensesActions.deleteExpense, (state, action) => {
+        return {
+            expenses: state.expenses.filter(expense => expense.id !== action.expense.id)
+        }
+    }),
+
+    on(ExpensesActions.setExpensesDefault, (state, action) => {
+        return {
+            expenses: []
+        }
+    }),
 )

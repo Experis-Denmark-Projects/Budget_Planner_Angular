@@ -1,11 +1,27 @@
 import { createAction, props } from '@ngrx/store';
 import { Category } from 'src/app/models/category.model';
 
-export const getCategories = createAction(
-    '[Budget Page] Get Category'
+export const setCategories = createAction(
+    '[Budget Page] Set Categories',
+    props<{categories:Category[]}>()
 )
 
-export const setCategories = createAction(
-    '[Budget Page] Set Category',
-    props<{categories:Category[]}>()
+export const addCategory = createAction(
+    '[Budget Page] Add Category',
+    props<{category:Category}>()
+)
+
+export const updateCategory = createAction(
+    '[Budget Page] Update Category',
+    props<{category:Category}>()
+)
+
+
+export const deleteCategory = createAction(
+    '[Budget Page] Delete Category',
+    props<{category:Category}>()
+)
+
+export const setCategoriesDefault = createAction(
+    '[Profile Popup] Set Default Categories'
 )

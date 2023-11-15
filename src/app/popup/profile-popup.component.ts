@@ -2,6 +2,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { PopupService } from '../services/popup.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { setCategoriesDefault } from '../redux/actions/category.actions';
+import { setExpensesDefault } from '../redux/actions/expenses.actions';
 
 @Component({
   selector: 'app-popup',
@@ -15,7 +18,8 @@ export class PopupComponent {
   constructor(
     private popupService:PopupService,
     public auth:AuthService, 
-    public router:Router) {}
+    public router:Router,
+    private store:Store) {}
 
   onClose(){
     this.popupService.closePopup();
@@ -39,6 +43,8 @@ export class PopupComponent {
 
   logout(){
     this.onClose()
+    this.store.dispatch(setCategoriesDefault())
+    this.store.dispatch(setExpensesDefault())
     this.auth.logout()
   }
 }
