@@ -10,10 +10,12 @@
 
 
 
+
+
 .budgetPageDiv{
     background-color: lightgray;
     display: grid;
-    grid: auto / auto auto auto;
+    grid: auto / auto  auto auto  ;
     grid-gap: 10px;
     padding: 10px;
 }
@@ -27,4 +29,8 @@
 
 .create-category-button:hover{
     opacity: 50;
+}
+
+.categoryDiv{
+    padding: 10px;
 }
