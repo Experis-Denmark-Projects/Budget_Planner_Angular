@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ComponentFactoryResolver, ComponentRef, ViewChild, ViewContainerRef, Output, EventEmitter } from '@angular/core';
 import { Category } from 'src/app/models/category.model';
 import { Expense } from 'src/app/models/expense.model';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
 import { ExpenseComponent } from '../expense/expense.component';
 import { CategoryService } from 'src/app/services/category.service';
+import { AppState } from '@auth0/auth0-angular';
+import { Store } from '@ngrx/store';
+import { setExpenses } from 'src/app/redux/actions/expenses.actions';
 
 @Component({
   selector: 'app-category',
@@ -22,7 +23,8 @@ export class CategoryComponent implements OnInit{
   constructor(
     private categoryService:CategoryService,
     private componentFactoryResolver:ComponentFactoryResolver,
-    private viewContainerRef:ViewContainerRef){}
+    private viewContainerRef:ViewContainerRef,
+    private store:Store<AppState>){}
 
   ngOnInit(){
     
@@ -43,6 +45,7 @@ export class CategoryComponent implements OnInit{
       if(this.category.id){
         this.categoryService.postExpenseObservable({...expense, category: this.category.id}).subscribe((expense:Expense) => {
           this.expenses.push(expense)
+          this.store.dispatch(setExpenses({expenses: this.expenses}))
           dynamicomponentRef.destroy();
           this.canAddExpense = true
           this.expenseChange.emit(this.total())
