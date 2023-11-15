@@ -1,3 +1,24 @@
+.expenseDiv{
+    margin: 5px;
+}
+
+.inputFormsDiv{
+    display: flex;
+    justify-content: center;
+}
+
 .add-expense-button:disabled{
     opacity: 50;
+    margin-left: 5px;
+}
+.add-expense-button{
+    margin-left: 5px;
+}
+
+.expenseAmountDiv{
+    margin: 5px;
+}
+
+.expenseNameDiv{
+    margin: 5px;
 }
