@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
 import { addCategory, deleteCategory, setCategories } from 'src/app/redux/actions/category.actions';
 import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors/categories.selectors';
-import { categoryTotalExpense, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
+import { categoryTotalExpense, remainingBudget, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
 import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
@@ -22,7 +22,7 @@ import { selectTotalBudget } from 'src/app/redux/selectors/user.selectors';
 })
 export class BudgetPage implements OnInit {
   categories$: Observable<Category[]> = new Observable<Category[]>
-  budgetRemainder:number = 0
+  remainingBudget$:Observable<number> = new Observable<number>
   total$:Observable<number> = new Observable<number>
   // Form Controls
   name = new FormControl('', [
@@ -46,11 +46,11 @@ export class BudgetPage implements OnInit {
     private activatedRoute:ActivatedRoute){}
 
   ngOnInit(): void { 
-    console.log('Budget Page: OnInit')
     this.categories$ = this.store.select(selectCategories())
     this.activatedRoute.params.pipe(takeUntil(this.ngUnsubscribe$)).subscribe(params => {
       
-      this.total$ = this.store.select(selectTotalBudget());
+      this.total$ = this.store.select(selectTotalBudget);
+      this.remainingBudget$ = this.store.select(remainingBudget);
     });
   }
 
@@ -62,7 +62,6 @@ export class BudgetPage implements OnInit {
       this.categories$.subscribe({
         next:(categories:Category[]) => {
           categories.map((category:Category)  => {
-            
             if(category.id){
               console.log(`Show Graph: ${this.showGraph}`)
               const total = this.store.select(categoryTotalExpense(category.id));
@@ -73,7 +72,6 @@ export class BudgetPage implements OnInit {
                 }
               })
             }
-    
           })
         }
       })

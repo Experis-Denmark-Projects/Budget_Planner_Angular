@@ -4,7 +4,7 @@
             Total Budget: {{(total$ | async) ?? 0}}kr.
         </div>
         <div class="budgetItem">
-            Resterende Budget: {{budgetRemainder}} kr
+            Resterende Budget: {{remainingBudget$ | async}} kr
         </div>
         
         <button (click)="showPieChart()">Show Pie Chart</button>

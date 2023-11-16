@@ -8,7 +8,7 @@ export const selectUser = () => createSelector(
     auth => auth.user
 )
 
-export const selectTotalBudget = () => createSelector(
+export const selectTotalBudget = createSelector(
     selectAuthState,
     auth => auth.user?.totalBudget ?? 0
 )
