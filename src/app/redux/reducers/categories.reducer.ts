@@ -32,13 +32,15 @@ export const categoriesReducer = createReducer(
 
     on(CategoriesActions.updateCategory, (state, action) => {
         return {
-            categories: state.categories.map(category => category.id === action.category.id ? action.category : category)
+            categories: state.categories.map(category => category.id === action.category.id ? action.category : category),
+            isLoaded: state.isLoaded
         }
     }),
 
     on(CategoriesActions.deleteCategory, (state, action) => {
         return {
-            categories: state.categories.filter(category => category.id !== action.category.id)
+            categories: state.categories.filter(category => category.id !== action.category.id),
+            isLoaded: state.isLoaded
         }
     }),
 
