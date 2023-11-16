@@ -1,6 +1,6 @@
 <div class="budgetBar">
     <div class="budgetItem">
-        Total Budget: {{auth.User.totalBudget}}kr.
+        Total Budget: {{(total$ | async) ?? 0}}kr.
     </div>
     <div class="budgetItem">
         Resterende Budget: {{budgetRemainder}} kr
