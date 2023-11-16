@@ -1,30 +1,32 @@
-<div class="budgetBar">
-    <div class="budgetItem">
-        Total Budget: {{(total$ | async) ?? 0}}kr.
+<div class="budgetContainer">
+    <div class="budgetBar">
+        <div class="budgetItem">
+            Total Budget: {{(total$ | async) ?? 0}}kr.
+        </div>
+        <div class="budgetItem">
+            Resterende Budget: {{budgetRemainder}} kr
+        </div>
+        
+        <button (click)="showPieChart()">Show Pie Chart</button>
     </div>
-    <div class="budgetItem">
-        Resterende Budget: {{budgetRemainder}} kr
+    <div class="budgetPageDiv">
+        
+        <div *ngFor="let category of categories$ | async">
+            <app-category [category]="category"></app-category>
+        </div>
+        
+        <div class="categoryDiv">
+            <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+                <!-- Name Div -->
+                <div class="name-div">
+                    <app-input [control]="name" placeholder="Enter category name"/>
+                </div>
+                <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
+            </form >
+        </div> 
     </div>
     
-    <button (click)="showPieChart()">Show Pie Chart</button>
-</div>
-<div class="budgetPageDiv">
-    
-    <div *ngFor="let category of categories$ | async">
-        <app-category [category]="category"></app-category>
+    <div class="graphDiv" *ngIf="showGraph">
+        <app-new-charts [input]="input"/>
     </div>
-    
-    <div class="categoryDiv">
-        <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
-            <!-- Name Div -->
-            <div class="name-div">
-                <app-input [control]="name" placeholder="Enter category name"/>
-            </div>
-            <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
-        </form >
-    </div> 
-</div>
-
-<div *ngIf="showGraph">
-    <app-new-charts [input]="input"/>
 </div>
