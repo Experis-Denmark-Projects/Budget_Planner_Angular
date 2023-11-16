@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 
 @Component({
@@ -9,7 +9,9 @@ import { Chart } from 'chart.js/auto';
 export class NewChartsComponent implements OnInit {
   title = 'Antal procent hver kategory fylder fra det total budget ';
   chart: any = [];
-    
+  
+  @Input() input:{ name: string; totalPrice: number }[] = []
+
   categories = [
     { name: "Category1", totalPrice: 300 },
     { name: "Category2", totalPrice: 150 },
@@ -28,7 +30,7 @@ export class NewChartsComponent implements OnInit {
   }
 
   createChart() {
-    const percentages = this.calculatePercentages(this.categories);
+    const percentages = this.calculatePercentages(this.input);
   
     this.chart = new Chart('canvas', {
       type: 'pie', // Change chart type to pie

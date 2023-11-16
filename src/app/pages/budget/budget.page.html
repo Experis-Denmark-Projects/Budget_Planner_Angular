@@ -5,14 +5,15 @@
     <div class="budgetItem">
         Resterende Budget: {{budgetRemainder}} kr
     </div>
-
-    <button>Tilføj nyt felt</button>
+    
+    <button (click)="showPieChart()">Show Pie Chart</button>
 </div>
 <div class="budgetPageDiv">
-
+    
     <div  *ngFor="let category of categories$ | async">
         <app-category [category]="category"></app-category>
     </div>
+    
     <div class="categoryDiv">
         <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
             <!-- Name Div -->
@@ -22,4 +23,8 @@
             <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
         </form >
     </div> 
+</div>
+
+<div *ngIf="showGraph">
+    <app-new-charts [input]="input"/>
 </div>

@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
 import { addCategory, deleteCategory, setCategories } from 'src/app/redux/actions/category.actions';
 import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors/categories.selectors';
-import { selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
+import { categoryTotalExpense, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
 import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
@@ -21,6 +21,7 @@ import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
 })
 export class BudgetPage implements OnInit {
   categories$: Observable<Category[]> = new Observable<Category[]>
+  categories:Category[] = []
   budgetRemainder:number = 0
   // Form Controls
   name = new FormControl('', [
@@ -31,6 +32,9 @@ export class BudgetPage implements OnInit {
   categoryForm = new FormGroup({
     name: this.name
   })
+
+  input:{ name: string; totalPrice: number }[] = []
+  showGraph:boolean = false
 
   private ngUnsubscribe$ = new Subject<void>();
 
@@ -48,6 +52,27 @@ export class BudgetPage implements OnInit {
       // You can handle parameters if needed
       console.log('Route parameters changed:', params);
     });
+  }
+
+  showPieChart(){
+    this.categories$.subscribe({
+      next:(categories:Category[]) => {
+        categories.map((category:Category)  => {
+          
+          if(category.id){
+            console.log(`Show Graph: ${this.showGraph}`)
+            const total = this.store.select(categoryTotalExpense(category.id));
+            total.subscribe({
+              next: (val) => {
+                this.input.push({name: category.name ?? '', totalPrice: val})
+                this.showGraph = true;
+              }
+            })
+          }
+  
+        })
+      }
+    })
   }
 
   addCategory(){
