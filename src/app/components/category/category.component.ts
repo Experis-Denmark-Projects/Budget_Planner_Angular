@@ -19,6 +19,7 @@ export class CategoryComponent implements OnInit{
   @Input() category: Category = {};
   @Input() expenses: Expense[] = [];
   @Output() expenseChange:EventEmitter<number> = new EventEmitter
+  @Output() deleteCategory:EventEmitter<void> = new EventEmitter
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   canAddExpense = true
   expenses$: Observable<Expense[]> = new Observable<Expense[]>
@@ -83,5 +84,9 @@ export class CategoryComponent implements OnInit{
         console.log('Could not delete expense')
       }
     })
+  }
+
+  removeCategory(){
+    this.deleteCategory.emit();
   }
 }

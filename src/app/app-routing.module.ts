@@ -4,6 +4,7 @@ import { LoginPage } from './pages/login/login.page';
 import { BudgetPage } from './pages/budget/budget.page';
 import { ProfilePage } from './pages/profile/profile.page';
 import { AuthGuard } from '@auth0/auth0-angular';
+import { BudgetResolver } from './redux/resolvers/budget.resolver';
 
 const routes: Routes = [
   {
@@ -13,7 +14,10 @@ const routes: Routes = [
   {
     path: 'budget',
     component: BudgetPage,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      data: BudgetResolver
+    }
   },
   {
     path: 'profile',

@@ -6,8 +6,11 @@ import { CategoryService } from 'src/app/services/category.service';
 import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
-import { addCategory, setCategories } from 'src/app/redux/actions/category.actions';
+import { addCategory, deleteCategory, setCategories } from 'src/app/redux/actions/category.actions';
 import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors/categories.selectors';
+import { selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
+import { Expense } from 'src/app/models/expense.model';
+import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
 
 @Component({
   selector: 'app-budget',
@@ -15,8 +18,6 @@ import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors
   styleUrls: ['./budget.page.css']
 })
 export class BudgetPage implements OnInit {
-
-  categories:Category[] = []
   categories$: Observable<Category[]> = new Observable<Category[]>
   budgetRemainder:number = 0
   // Form Controls
@@ -34,15 +35,8 @@ export class BudgetPage implements OnInit {
     public readonly auth:AuthService,
     private store: Store<AppState>){}
 
-  ngOnInit(): void {
-    // On LoginWithRedirect this component is rendered before http requests are done fethcing.
-    // Do not call categories get request if the user has not been fetched and set yet. 
-    if(this.auth.User.id){
-      this.categoryService.getCategoriesObservable().subscribe((categories:Category[]) => {
-        this.store.dispatch(setCategories({categories}));
-        this.categories$ = this.store.select(selectCategories())
-      })
-    }
+  ngOnInit(): void { 
+    this.categories$ = this.store.select(selectCategories())
   }
 
   addCategory(){
@@ -54,8 +48,25 @@ export class BudgetPage implements OnInit {
     this.categoryService.postCategoryObservable(category).subscribe(
       ((category:Category) => {
         this.store.dispatch(addCategory({category}))
-        this.categories$ = this.store.select(selectCategories())
       })
     )
+  }
+
+  onRemoveCategory(category:Category){
+
+    if(category.id){
+      this.categoryService.deleteCategoryObservable(category.id).subscribe(() => {
+        // Prompt that category has been deleted
+        // Delete Expenses & Category from store.
+        if(category.id){
+          this.store.select(selectExpenses(category.id)).subscribe((expenses:Expense[]) => {
+            expenses.map(expense => {
+              this.store.dispatch(deleteExpense({expense}))
+            })
+            this.store.dispatch(deleteCategory({category}))
+          })
+        }
+      })
+    }
   }
 }

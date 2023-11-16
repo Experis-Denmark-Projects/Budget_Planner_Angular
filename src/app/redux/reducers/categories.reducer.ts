@@ -4,11 +4,13 @@ import { CategoriesActions } from '../action-types';
 import { Expense } from 'src/app/models/expense.model';
 
 export interface CategoriesState {
-    categories:Category[]
+    categories:Category[],
+    isLoaded?:boolean
 }
 
 export const initialCategoriesState: CategoriesState = {
-    categories: []
+    categories: [],
+    isLoaded:false
 }
 
 export const categoriesReducer = createReducer(
@@ -16,7 +18,8 @@ export const categoriesReducer = createReducer(
 
     on(CategoriesActions.setCategories, (state, action) => {
         return {
-            categories: action.categories
+            categories: action.categories,
+            isLoaded: action.isLoaded
         }
     }),
 
@@ -40,7 +43,8 @@ export const categoriesReducer = createReducer(
 
     on(CategoriesActions.setCategoriesDefault, (state, action) => {
         return {
-            categories: []
+            categories: [],
+            isLoaded: false
         }
     }),
 )

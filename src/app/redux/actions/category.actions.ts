@@ -3,7 +3,7 @@ import { Category } from 'src/app/models/category.model';
 
 export const setCategories = createAction(
     '[Budget Page] Set Categories',
-    props<{categories:Category[]}>()
+    props<{categories:Category[], isLoaded:boolean}>()
 )
 
 export const addCategory = createAction(

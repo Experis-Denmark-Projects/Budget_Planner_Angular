@@ -107,6 +107,19 @@ export class CategoryService{
     })
   }
 
+  getAllExpensesObservable():Observable<Expense[]>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application json`
+    });
+
+    return this.http.get<Expense[]>(`${this.apiUrl}/private/user/expense`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
   postExpenseObservable(expense:Expense):Observable<Expense>{
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.auth.accessToken}`,

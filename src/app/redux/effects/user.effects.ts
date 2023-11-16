@@ -6,12 +6,12 @@ import { UserActions } from '../action-types';
 @Injectable()
 export class UserEffects {
 
-    login$ = createEffect(() => this.actions$.pipe(
+    /* login$ = createEffect(() => this.actions$.pipe(
         ofType(UserActions.login),
         tap(action => {
             // 
         })
-    ), {dispatch: false})
+    ), {dispatch: false}) */
 
     constructor(private actions$: Actions){}
 }
