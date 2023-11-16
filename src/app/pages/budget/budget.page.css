@@ -4,10 +4,12 @@
     align-items: center;
     background-color: lightblue;
     padding: 5px;
-    
 }
 
-
+.budgetContainer{
+    height: 100%;
+    background-color: lightgray;
+}
 
 
 
@@ -15,9 +17,8 @@
 .budgetPageDiv{
     background-color: lightgray;
     display: grid;
-    grid: auto / auto  auto auto  ;
-    grid-gap: 10px;
-    padding: 10px;
+    grid-template-columns: auto auto auto; 
+
 }
 
 .budgetPageDiv > *{
@@ -33,4 +34,10 @@
 
 .categoryDiv{
     padding: 10px;
+    
+}
+
+.graphDiv{
+    display: flex;
+    justify-content: center;
 }
