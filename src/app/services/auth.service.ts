@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
-import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
+import { AuthService as Auth0AuthService, IdToken } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
 import { catchError, switchMap } from 'rxjs/operators'
 import { forkJoin, of, Observable, Subject } from 'rxjs';
@@ -19,6 +19,7 @@ export class AuthService {
   private user:User = {}
   public isAuthenticated$:Observable<boolean>
   public accessToken$:Observable<string>
+  public idToken$:Observable<IdToken | null | undefined> = new Observable<IdToken | null | undefined>
   public user$:Subject<User> = new Subject<User>
   public loggedIn$: Subject<void> = new Subject<void>
   public get User(){
@@ -33,6 +34,7 @@ export class AuthService {
 
     this.isAuthenticated$ = this.auth0.isAuthenticated$
     this.accessToken$ = this.auth0.getAccessTokenSilently()
+    this.idToken$ = this.auth0.idTokenClaims$
   }
 
   login() {

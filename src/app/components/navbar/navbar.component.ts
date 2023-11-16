@@ -53,6 +53,12 @@ export class NavbarComponent implements OnInit{
           }))
           this.auth.user$.next(user)
         })
+
+        this.auth.idToken$.subscribe((idToken) => {
+          if(idToken){
+            this.imageUrl = idToken.picture ?? this.imageUrl;
+          }
+        })
       }
     })
   }
