@@ -23,6 +23,7 @@ export class PopupComponent {
 
   onClose(){
     this.popupService.closePopup();
+    
   }
 
   navigateToProfile(){
