@@ -1,11 +1,9 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { Category } from '../models/category.model';
-import { Observable, map, of, catchError, switchMap, filter } from 'rxjs'
+import { Observable} from 'rxjs'
 import { environment } from 'src/environments/environment.development';
 import { User } from '../models/user.model'
-import { Expense } from '../models/expense.model';
 
 @Injectable({
   providedIn: 'root'

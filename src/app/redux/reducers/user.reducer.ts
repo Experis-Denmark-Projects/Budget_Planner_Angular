@@ -1,4 +1,4 @@
-import { User } from '@auth0/auth0-angular';
+import { User } from 'src/app/models/user.model';
 import { createReducer, on } from '@ngrx/store';
 import { UserActions } from '../action-types';
 
@@ -30,6 +30,14 @@ export const userReducer = createReducer(
             accessToken: '',
             isAuthenticated: false,
             user: {}
+        }
+    }),
+
+    on(UserActions.setUser, (state, action) => {
+        return {
+            accessToken: state.accessToken,
+            isAuthenticated: state.isAuthenticated,
+            user: action.user
         }
     })
 )

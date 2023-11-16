@@ -13,6 +13,7 @@ import { categoryTotalExpense, selectExpenses } from 'src/app/redux/selectors/ex
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
 import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
+import { selectTotalBudget } from 'src/app/redux/selectors/user.selectors';
 
 @Component({
   selector: 'app-budget',
@@ -21,8 +22,8 @@ import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
 })
 export class BudgetPage implements OnInit {
   categories$: Observable<Category[]> = new Observable<Category[]>
-  categories:Category[] = []
   budgetRemainder:number = 0
+  total$:Observable<number> = new Observable<number>
   // Form Controls
   name = new FormControl('', [
     Validators.required,
@@ -47,10 +48,9 @@ export class BudgetPage implements OnInit {
   ngOnInit(): void { 
     console.log('Budget Page: OnInit')
     this.categories$ = this.store.select(selectCategories())
-
     this.activatedRoute.params.pipe(takeUntil(this.ngUnsubscribe$)).subscribe(params => {
-      // You can handle parameters if needed
-      console.log('Route parameters changed:', params);
+      
+      this.total$ = this.store.select(selectTotalBudget());
     });
   }
 
