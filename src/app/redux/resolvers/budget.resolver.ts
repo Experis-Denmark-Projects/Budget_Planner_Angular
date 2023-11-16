@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { Resolve, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { take, filter, switchMap, takeUntil } from 'rxjs/operators';
@@ -10,7 +10,6 @@ import { selectCategoriesState } from '../selectors/categories.selectors';
 import { AuthService } from 'src/app/services/auth.service';
 import { setExpenses } from '../actions/expenses.actions';
 import { Category } from 'src/app/models/category.model';
-import { CategoriesState } from '../reducers/categories.reducer';
 import { Expense } from 'src/app/models/expense.model';
 import { Subject } from 'rxjs';
 
@@ -20,33 +19,44 @@ import { Subject } from 'rxjs';
 export class BudgetResolver implements Resolve<Observable<any>> {
 
   private ngUnsubscribe$ = new Subject<void>();
+  private userLoggedIn$ = new Subject<void>();
 
   constructor(
     private store: Store<AppState>,
     private auth:AuthService,
-    private categoryService: CategoryService // replace with the actual path to your service
+    private categoryService: CategoryService,
   ) {}
 
   resolve(): Observable<any> {
     return this.store.pipe(
       select(selectCategoriesState),
       take(1),
-      filter(categoriesState => !categoriesState.isLoaded),
-      switchMap(() => {
-        this.auth.user$.subscribe(() => {
-          this.categoryService.getCategoriesObservable().pipe(
-            switchMap((categories:Category[]) => {
-              this.store.dispatch(setCategories({categories:categories, isLoaded:true}));
-              return this.categoryService.getAllExpensesObservable()
-            }),
-            switchMap((expenses:Expense[]) => {
-              this.store.dispatch(setExpenses({expenses}));
-              return of(true)
+      switchMap((categoriesState) => {
+        console.log('Outside')
+        if (!categoriesState.isLoaded) {
+          // Only proceed with fetching data if isLoaded is false
+          console.log('Inside')
+          return this.auth.user$.pipe(
+            takeUntil(this.ngUnsubscribe$),
+            switchMap(() => {
+              return this.categoryService.getCategoriesObservable().pipe(
+                switchMap((categories: Category[]) => {
+                  this.store.dispatch(setCategories({ categories, isLoaded: true }));
+                  return this.categoryService.getAllExpensesObservable();
+                }),
+                switchMap((expenses: Expense[]) => {
+                  this.store.dispatch(setExpenses({ expenses }));
+                  return of(true);
+                }),
+              );
             })
-          )
-        })
-        return of(true)
-      })
+          );
+        } else {
+          // If isLoaded is already true, resolve immediately
+          return of(true);
+        }
+      }),
+      takeUntil(this.ngUnsubscribe$)
     );
   }
 
@@ -55,5 +65,3 @@ export class BudgetResolver implements Resolve<Observable<any>> {
     this.ngUnsubscribe$.complete();
   }
 }
-
-//<div class="budgetPageDiv" *ngFor="let category of categories$ | async">

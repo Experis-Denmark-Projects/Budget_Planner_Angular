@@ -10,8 +10,10 @@
     </div>
     <button type="button" [disabled]="!canAddExpense" (click)="createExpense()">New Expense</button>
     
-    <!-- Place New Expense Below -->
-    <ng-container #dynamicComponentContainer></ng-container>
+    <div class="container-div">
+        <!-- Place New Expense Below -->
+        <ng-container #dynamicComponentContainer></ng-container>
+    </div>
 
 
     <div class="totalPriceDiv">

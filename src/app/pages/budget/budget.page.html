@@ -10,18 +10,16 @@
 </div>
 <div class="budgetPageDiv">
 
-    <div  *ngFor="let category of categoryService.categories">
+    <div  *ngFor="let category of categories$ | async">
         <app-category [category]="category"></app-category>
-        
     </div>
+    <div class="categoryDiv">
+        <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+            <!-- Name Div -->
+            <div class="name-div">
+                <app-input [control]="name" placeholder="Enter category name"/>
+            </div>
+            <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
+        </form >
+    </div> 
 </div>
-
-<div class="categoryDiv">
-    <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
-        <!-- Name Div -->
-        <div class="name-div">
-            <app-input [control]="name" placeholder="Enter category name"/>
-        </div>
-        <button class="create-category-button" [disabled]="categoryForm.invalid">Create Category</button>
-    </form >
-</div> 

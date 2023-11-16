@@ -32,6 +32,7 @@ import { environment } from 'src/environments/environment.development';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { NewChartsComponent } from './components/new-charts/new-charts.component';
+import { BudgetResolver } from './redux/resolvers/budget.resolver';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { NewChartsComponent } from './components/new-charts/new-charts.component
   providers: [
     provideEnvironmentNgxMask(),
     UserService,
-    CategoryService
+    CategoryService,
+    BudgetResolver
   ],
   bootstrap: [AppComponent]
 })

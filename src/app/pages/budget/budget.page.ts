@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/category.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CategoryService } from 'src/app/services/category.service';
-import { Observable } from 'rxjs'
+import { Observable, Subject  } from 'rxjs'
+import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
 import { addCategory, deleteCategory, setCategories } from 'src/app/redux/actions/category.actions';
@@ -11,6 +12,7 @@ import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors
 import { selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
+import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
 
 @Component({
   selector: 'app-budget',
@@ -30,13 +32,22 @@ export class BudgetPage implements OnInit {
     name: this.name
   })
 
+  private ngUnsubscribe$ = new Subject<void>();
+
   constructor(
     public readonly categoryService:CategoryService,
     public readonly auth:AuthService,
-    private store: Store<AppState>){}
+    private store: Store<AppState>,
+    private activatedRoute:ActivatedRoute){}
 
   ngOnInit(): void { 
+    console.log('Budget Page: OnInit')
     this.categories$ = this.store.select(selectCategories())
+
+    this.activatedRoute.params.pipe(takeUntil(this.ngUnsubscribe$)).subscribe(params => {
+      // You can handle parameters if needed
+      console.log('Route parameters changed:', params);
+    });
   }
 
   addCategory(){

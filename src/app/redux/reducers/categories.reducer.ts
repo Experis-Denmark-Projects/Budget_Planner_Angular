@@ -25,7 +25,8 @@ export const categoriesReducer = createReducer(
 
     on(CategoriesActions.addCategory, (state, action) => {
         return {
-            categories: [...state.categories, action.category]
+            categories: [...state.categories, action.category],
+            isLoaded: true
         }
     }),
 

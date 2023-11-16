@@ -16,7 +16,7 @@ const routes: Routes = [
     component: BudgetPage,
     canActivate: [AuthGuard],
     resolve: {
-      data: BudgetResolver
+      categories: BudgetResolver
     }
   },
   {
