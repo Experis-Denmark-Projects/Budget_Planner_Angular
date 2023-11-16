@@ -3,7 +3,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AppState } from '@auth0/auth0-angular';
 import { Store } from '@ngrx/store';
 import { Expense } from 'src/app/models/expense.model';
-import { updateExpense } from 'src/app/redux/actions/expenses.actions';
+import { addExpense, updateExpense } from 'src/app/redux/actions/expenses.actions';
 import { CategoryService } from 'src/app/services/category.service';
 
 

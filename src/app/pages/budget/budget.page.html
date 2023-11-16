@@ -10,7 +10,7 @@
 </div>
 <div class="budgetPageDiv">
     
-    <div  *ngFor="let category of categories$ | async">
+    <div *ngFor="let category of categories$ | async">
         <app-category [category]="category"></app-category>
     </div>
     

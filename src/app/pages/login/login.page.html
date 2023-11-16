@@ -5,7 +5,4 @@
         <h3>Login eller registerer dig for få et overblik over dit budget</h3>
         <button *ngIf="!(auth.isAuthenticated$ | async)" (click)="login()">Login</button>
     </div>
-
-
-    <app-new-charts></app-new-charts>
 </div>

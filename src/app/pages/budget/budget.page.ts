@@ -55,24 +55,29 @@ export class BudgetPage implements OnInit {
   }
 
   showPieChart(){
-    this.categories$.subscribe({
-      next:(categories:Category[]) => {
-        categories.map((category:Category)  => {
-          
-          if(category.id){
-            console.log(`Show Graph: ${this.showGraph}`)
-            const total = this.store.select(categoryTotalExpense(category.id));
-            total.subscribe({
-              next: (val) => {
-                this.input.push({name: category.name ?? '', totalPrice: val})
-                this.showGraph = true;
-              }
-            })
-          }
-  
-        })
-      }
-    })
+    if(this.showGraph){
+      this.showGraph = !this.showGraph
+      this.input = []
+    }else{
+      this.categories$.subscribe({
+        next:(categories:Category[]) => {
+          categories.map((category:Category)  => {
+            
+            if(category.id){
+              console.log(`Show Graph: ${this.showGraph}`)
+              const total = this.store.select(categoryTotalExpense(category.id));
+              total.subscribe({
+                next: (val) => {
+                  this.input.push({name: category.name ?? '', totalPrice: val})
+                  this.showGraph = true;
+                }
+              })
+            }
+    
+          })
+        }
+      })
+    }
   }
 
   addCategory(){
@@ -92,8 +97,6 @@ export class BudgetPage implements OnInit {
 
     if(category.id){
       this.categoryService.deleteCategoryObservable(category.id).subscribe(() => {
-        // Prompt that category has been deleted
-        // Delete Expenses & Category from store.
         if(category.id){
           this.store.select(selectExpenses(category.id)).subscribe((expenses:Expense[]) => {
             expenses.map(expense => {

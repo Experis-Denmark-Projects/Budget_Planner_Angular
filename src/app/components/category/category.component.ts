@@ -17,7 +17,6 @@ import { Observable } from 'rxjs'
 export class CategoryComponent implements OnInit{
 
   @Input() category: Category = {};
-  @Input() expenses: Expense[] = [];
   @Output() expenseChange:EventEmitter<number> = new EventEmitter
   @Output() deleteCategory:EventEmitter<void> = new EventEmitter
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
@@ -53,16 +52,10 @@ export class CategoryComponent implements OnInit{
     dynamicomponentRef.instance.create.subscribe((expense:Expense) => {
       if(this.category.id){
         this.categoryService.postExpenseObservable({...expense, category: this.category.id}).subscribe((expense:Expense) => {
-          this.expenses.push(expense)
           this.store.dispatch(addExpense({expense}))
-          
-          if(this.category.id){
-            this.expenses$ = this.store.select(selectExpenses(this.category.id))
-          }
           
           dynamicomponentRef.destroy();
           this.canAddExpense = true
-          //this.expenseChange.emit(this.total())
         })
       }else{
         console.log(`No Category Id`)
@@ -73,11 +66,8 @@ export class CategoryComponent implements OnInit{
   onRemoveExpense(expense:Expense){
     this.categoryService.deleteExpenseObservable(expense).subscribe({
       next: () => {
-        //this.expenseChange.emit(this.total())
         if(this.category.id){
-          //this.expenses = this.expenses.filter(item => item.id !== expense.id)
           this.store.dispatch(deleteExpense({expense}))
-          this.expenses$ = this.store.select(selectExpenses(this.category.id))
         }
       },
       error: () => {
