@@ -12,7 +12,7 @@
     <div class="budgetPageDiv">
         
         <div *ngFor="let category of categories$ | async">
-            <app-category (deleteCategory)="onRemoveCategory(category)" [category]="category"></app-category>
+            <app-category (deleteCategory)="onRemoveCategory(category)" [category]="category" (expenseChange)="updateChart()"></app-category>
         </div>
         
         <div class="categoryDiv">

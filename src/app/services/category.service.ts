@@ -74,7 +74,7 @@ export class CategoryService{
       'Authorization': `Bearer ${this.auth.accessToken}`,
       'Content-Type': `application/json`,
     });
-    return this.http.put<void>(`${this.apiUrl}/private/user/category/${category.id}`, category, {
+    return this.http.put<void>(`${this.apiUrl}/private/user/category`, category, {
       headers: headers,
       withCredentials: true,
       responseType: 'json'

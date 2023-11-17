@@ -2,11 +2,14 @@
     <h3>
         {{category.name}}
     </h3>
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <app-input [control]="name" placeholder="Enter Category Name" (blur)="onInputBlur()"></app-input>
+    </form>
     <div>
         image
     </div>
     <div *ngFor="let expense of expenses$ | async">
-        <app-expense [expense]="expense" [canDelete]="true" (remove)="onRemoveExpense(expense)"></app-expense>
+        <app-expense [expense]="expense" [canDelete]="true" (remove)="onRemoveExpense(expense)" (create)="expenseChange.emit()"></app-expense>
     </div>
     <button type="button" [disabled]="!canAddExpense" (click)="createExpense()">New Expense</button>
     

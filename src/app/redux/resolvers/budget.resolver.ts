@@ -32,10 +32,8 @@ export class BudgetResolver implements Resolve<Observable<any>> {
       select(selectCategoriesState),
       take(1),
       switchMap((categoriesState) => {
-        console.log('Outside')
         if (!categoriesState.isLoaded) {
           // Only proceed with fetching data if isLoaded is false
-          console.log('Inside')
           return this.auth.user$.pipe(
             takeUntil(this.ngUnsubscribe$),
             switchMap(() => {

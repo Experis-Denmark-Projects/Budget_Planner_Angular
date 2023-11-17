@@ -7,12 +7,12 @@ import { Observable, Subject  } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
-import { addCategory, deleteCategory, setCategories } from 'src/app/redux/actions/category.actions';
-import { selectCategories, selectCategoriesState } from 'src/app/redux/selectors/categories.selectors';
+import { addCategory, deleteCategory } from 'src/app/redux/actions/category.actions';
+import { selectCategories } from 'src/app/redux/selectors/categories.selectors';
 import { categoryTotalExpense, remainingBudget, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
-import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { selectTotalBudget } from 'src/app/redux/selectors/user.selectors';
 
 @Component({
@@ -63,7 +63,28 @@ export class BudgetPage implements OnInit {
         next:(categories:Category[]) => {
           categories.map((category:Category)  => {
             if(category.id){
-              console.log(`Show Graph: ${this.showGraph}`)
+              const total = this.store.select(categoryTotalExpense(category.id));
+              total.subscribe({
+                next: (val) => {
+                  this.input.push({name: category.name ?? '', totalPrice: val})
+                  this.showGraph = true;
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+  }
+
+  updateChart(){
+    console.log('Called!')
+    if(this.showGraph){
+      this.input = []
+      this.categories$.subscribe({
+        next:(categories:Category[]) => {
+          categories.map((category:Category)  => {
+            if(category.id){
               const total = this.store.select(categoryTotalExpense(category.id));
               total.subscribe({
                 next: (val) => {
@@ -87,6 +108,7 @@ export class BudgetPage implements OnInit {
     this.categoryService.postCategoryObservable(category).subscribe(
       ((category:Category) => {
         this.store.dispatch(addCategory({category}))
+        this.name.setValue('');
       })
     )
   }

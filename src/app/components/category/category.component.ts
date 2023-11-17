@@ -8,6 +8,8 @@ import { Store, select } from '@ngrx/store';
 import { addExpense, deleteExpense, setExpenses } from 'src/app/redux/actions/expenses.actions';
 import { categoryTotalExpense, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Observable } from 'rxjs'
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { updateCategory } from 'src/app/redux/actions/category.actions';
 
 @Component({
   selector: 'app-category',
@@ -17,12 +19,22 @@ import { Observable } from 'rxjs'
 export class CategoryComponent implements OnInit{
 
   @Input() category: Category = {};
-  @Output() expenseChange:EventEmitter<number> = new EventEmitter
+  @Output() expenseChange:EventEmitter<void> = new EventEmitter
   @Output() deleteCategory:EventEmitter<void> = new EventEmitter
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer!: ViewContainerRef;
   canAddExpense = true
+  category$:Observable<Category> = new Observable<Category>()
   expenses$: Observable<Expense[]> = new Observable<Expense[]>
   total$: Observable<number> = new Observable<0>
+
+  name = new FormControl('', [
+    Validators.required,
+    Validators.minLength(2)
+  ])
+
+  categoryForm = new FormGroup({
+    name: this.name
+  })
 
   constructor(
     private categoryService:CategoryService,
@@ -35,6 +47,8 @@ export class CategoryComponent implements OnInit{
       this.expenses$ = this.store.select(selectExpenses(this.category.id))
       this.total$ = this.total()
     }
+
+    this.name.setValue(this.category.name ?? '');
   }
 
   // Compute Total Expense Amount
@@ -78,5 +92,33 @@ export class CategoryComponent implements OnInit{
 
   removeCategory(){
     this.deleteCategory.emit();
+  }
+
+  onSubmit(){
+    if(this.categoryForm.value && this.categoryForm.value.name){
+      const updatedCategory = {...this.category, name: this.categoryForm.value.name}
+      this.categoryService.putCategoryObservable(updatedCategory)
+      .subscribe({
+        next:() => {
+          if(this.categoryForm.value && this.categoryForm.value.name){
+            this.category = {...this.category, name: this.categoryForm.value.name}
+            this.store.dispatch(updateCategory({category: {...this.category, name: this.categoryForm.value.name}}))
+          }
+        },
+        error: () => {
+          // Prompt the user that the changes could not be saved.
+        }
+      })
+    }
+  }
+
+  onInputBlur(){
+    if(this.categoryForm.valid){
+      this.onSubmit();
+    }
+  }
+
+  onExpenseChanged(){
+    this.expenseChange.emit()
   }
 }

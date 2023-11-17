@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.development';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { AuthService as Auth0AuthService, IdToken } from '@auth0/auth0-angular';
 import { User } from '../models/user.model';
-import { catchError, switchMap } from 'rxjs/operators'
-import { forkJoin, of, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { logout } from '../redux/actions/user.actions';
 import { AppState } from '../redux';
+import { setCategoriesDefault } from '../redux/actions/category.actions';
+import { setExpensesDefault } from '../redux/actions/expenses.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -47,11 +47,15 @@ export class AuthService {
 
   logout(){
     this.isAuthenticated = false;
-    this.store.dispatch(logout())
     this.auth0.logout({
       logoutParams: {
         returnTo: `${window.location.origin}`
       }
+    }).subscribe(() => {
+      this.store.dispatch(setCategoriesDefault())
+      this.store.dispatch(setExpensesDefault())
+ 
     });
+    this.store.dispatch(logout())
   }
 }
