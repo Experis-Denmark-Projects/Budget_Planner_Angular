@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartTypeRegistry } from 'chart.js/auto';
 
 @Component({
   selector: 'app-new-charts',
@@ -9,15 +9,13 @@ import { Chart } from 'chart.js/auto';
 export class NewChartsComponent implements OnInit {
   title = 'Antal procent hver kategory fylder fra det total budget ';
   chart: any = [];
+
+  chartType: keyof ChartTypeRegistry= 'pie';
   
   @Input() input:{ name: string; totalPrice: number }[] = []
 
   categories = [
-    { name: "Category1", totalPrice: 300 },
-    { name: "Category2", totalPrice: 150 },
-    { name: "Category3", totalPrice: 150 },
-    { name: "Category4", totalPrice: 150 },
-    { name: "Category5", totalPrice: 200 },
+
   ];
 
   private calculatePercentages(categories: { name: string; totalPrice: number }[]): { name: string; percentage: number }[] {
@@ -30,10 +28,11 @@ export class NewChartsComponent implements OnInit {
   }
 
   createChart() {
+
     const percentages = this.calculatePercentages(this.input);
   
     this.chart = new Chart('canvas', {
-      type: 'pie', // Change chart type to pie
+      type: this.chartType, // Change chart type to pie
       data: {
         labels: percentages.map(item => item.name),
         datasets: [
@@ -81,4 +80,15 @@ export class NewChartsComponent implements OnInit {
   ngOnInit() {
     this.createChart();
   }
+
+toggleChartType(){
+  //this.chartType = 'bubble'
+  this.chartType = this.chartType === 'pie' ? 'bar' : 'pie';
+
+  if (this.chart) {
+    this.chart.destroy();
+  }
+  this.createChart();
+}
+
 }
