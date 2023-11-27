@@ -4,5 +4,6 @@ export type User = {
     username?: string,
     email?: string,
     totalBudget?: number
-    categories?: number[]
+    categories?: number[],
+    sharedCategories?: number[]
 }

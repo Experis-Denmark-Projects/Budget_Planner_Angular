@@ -12,6 +12,8 @@ import { setExpenses } from '../actions/expenses.actions';
 import { Category } from 'src/app/models/category.model';
 import { Expense } from 'src/app/models/expense.model';
 import { Subject } from 'rxjs';
+import { CategorySharing } from 'src/app/models/category-sharing';
+import { setCategorySharing } from '../actions/category-sharing.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,6 @@ import { Subject } from 'rxjs';
 export class BudgetResolver implements Resolve<Observable<any>> {
 
   private ngUnsubscribe$ = new Subject<void>();
-  private userLoggedIn$ = new Subject<void>();
 
   constructor(
     private store: Store<AppState>,
@@ -44,8 +45,12 @@ export class BudgetResolver implements Resolve<Observable<any>> {
                 }),
                 switchMap((expenses: Expense[]) => {
                   this.store.dispatch(setExpenses({ expenses }));
-                  return of(true);
+                  return this.categoryService.getCategorySharingsObservable();
                 }),
+                switchMap((categorySharings: CategorySharing[]) => {
+                  this.store.dispatch(setCategorySharing({ categorySharings }));
+                  return of(true);
+                })
               );
             })
           );

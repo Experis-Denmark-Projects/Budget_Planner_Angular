@@ -1,0 +1,37 @@
+.share-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.share-container-element {
+  display: grid;
+  grid-template-rows: auto auto; /* Two rows, the first for the paragraph and the second for input and button */
+  grid-template-columns: 1fr 1fr; /* Two columns, each taking up half of the container width */
+  align-items: center;
+  text-align: center;
+}
+
+.share-container-element p {
+  grid-column: span 2; /* Make the paragraph span both columns */
+  margin-bottom: 10px; /* Adjust as needed for spacing */
+  align-items: center;
+}
+
+.share-container-element app-input {
+  /* Add any styles you need for the input field */
+  margin-bottom: 10px; /* Adjust as needed for spacing */
+  align-self: center;
+}
+
+.share-container-element button {
+  /* Add any styles you need for the button */
+  margin-left: 10px; /* Adjust this margin based on your design */
+  align-self: center;
+  width: fit-content;
+}
+
+.share-container-element button:disabled{
+  opacity: 50;
+}

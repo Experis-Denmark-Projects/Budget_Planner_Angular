@@ -5,8 +5,8 @@ import { Observable } from 'rxjs'
 import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
 import { Expense } from '../models/expense.model';
-import { filter, switchMap } from 'rxjs/operators'
 import { User } from '../models/user.model';
+import { CategorySharing } from '../models/category-sharing';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,6 @@ export class CategoryService{
   categories:Category[] = []
 
   constructor(private readonly http:HttpClient, private readonly auth:AuthService) { 
-
     auth.user$.subscribe((user:User) => {
       if(user.id){
         this.getCategoriesObservable()
@@ -155,4 +154,55 @@ export class CategoryService{
       responseType: 'json'
     })
   }
+
+  /***** Category Sharing Requests *****/
+  getCategorySharingsObservable(): Observable<CategorySharing[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application json`
+    });
+
+    return this.http.get<CategorySharing[]>(`${this.apiUrl}/private/user/category-sharing`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  postCategorySharingObservable(categorySharing:CategorySharing):Observable<CategorySharing>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.post<CategorySharing>(`${this.apiUrl}/private/user/category-sharing`, categorySharing, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  putCategorySharingObservable(categorySharing:CategorySharing):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.put<void>(`${this.apiUrl}/private/user/category-sharing`, categorySharing, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
+  deleteCategorySharingObservable(categorySharing:CategorySharing):Observable<void>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.accessToken}`,
+      'Content-Type': `application/json`,
+    });
+    return this.http.delete<void>(`${this.apiUrl}/private/user/category-sharing/${categorySharing.id}`, {
+      headers: headers,
+      withCredentials: true,
+      responseType: 'json'
+    })
+  }
+
 }

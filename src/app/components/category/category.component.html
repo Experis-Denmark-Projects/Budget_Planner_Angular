@@ -2,6 +2,15 @@
     <h3>
         {{category.name}}
     </h3>
+    <h6>
+      Created at: {{ category.created | date: 'yyyy-MM-dd' }}
+    </h6>
+    <h6>
+      Last Modified: {{ calculateLastModifiedDays() }} days ago
+    </h6>
+    <div class="category-sharing-icon-container">
+      <img class="category-sharing-icon" src="../../assets/share-icon.svg" alt="" (click)="openShareCategoryDialog()">
+    </div>
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
         <app-input [control]="name" placeholder="Enter Category Name" (blur)="onInputBlur()"></app-input>
     </form>

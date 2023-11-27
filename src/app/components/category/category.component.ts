@@ -10,6 +10,9 @@ import { categoryTotalExpense, selectExpenses } from 'src/app/redux/selectors/ex
 import { Observable } from 'rxjs'
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { updateCategory } from 'src/app/redux/actions/category.actions';
+import { CategorySharing } from 'src/app/models/category-sharing';
+import { MatDialog } from '@angular/material/dialog';
+import { CategorySharePopupComponent } from '../category-share-popup/category-share-popup.component';
 
 @Component({
   selector: 'app-category',
@@ -26,6 +29,7 @@ export class CategoryComponent implements OnInit{
   category$:Observable<Category> = new Observable<Category>()
   expenses$: Observable<Expense[]> = new Observable<Expense[]>
   total$: Observable<number> = new Observable<0>
+  categorySharings$:Observable<CategorySharing[]> = new Observable<CategorySharing[]>
 
   name = new FormControl('', [
     Validators.required,
@@ -40,7 +44,8 @@ export class CategoryComponent implements OnInit{
     private categoryService:CategoryService,
     private componentFactoryResolver:ComponentFactoryResolver,
     private viewContainerRef:ViewContainerRef,
-    private store:Store<AppState>){}
+    private store:Store<AppState>,
+    private dialog:MatDialog){}
 
   ngOnInit(){
     if(this.category.id){
@@ -121,4 +126,23 @@ export class CategoryComponent implements OnInit{
   onExpenseChanged(){
     this.expenseChange.emit()
   }
+
+  openShareCategoryDialog(){
+    this.dialog.open(CategorySharePopupComponent, {
+      id: `${this.category.id} Share Category Dialog`,
+      width: '700px',
+      height: '200px'
+    })
+  }
+
+  calculateLastModifiedDays(): number {
+    if (this.category.lastModified instanceof Date) {
+      const currentDate = new Date().getTime();
+      const timeDifference = currentDate - this.category.lastModified.getTime();
+      return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    }
+  
+    return 0;
+  }
+  
 }

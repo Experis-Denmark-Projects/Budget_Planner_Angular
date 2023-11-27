@@ -58,4 +58,13 @@ export class ProfilePage implements OnInit{
   ngOnDestroy(){
     this.userSubscription = this.store.select(selectUser()).subscribe((user) => this.user = user)
   }
+
+
+  acceptCategorySharing(){
+
+  }
+
+  rejectCategorySharing(){
+    
+  }
 }

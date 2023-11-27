@@ -33,6 +33,10 @@ import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { NewChartsComponent } from './components/new-charts/new-charts.component';
 import { BudgetResolver } from './redux/resolvers/budget.resolver';
+import { NotificationComponent } from './components/notification/notification.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
+import { CategorySharePopupComponent } from './components/category-share-popup/category-share-popup.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,10 @@ import { BudgetResolver } from './redux/resolvers/budget.resolver';
     ExpenseComponent,
     ChartsComponent,
     NewChartsComponent,
+    NotificationComponent,
+    DialogComponent,
+    DynamicContentComponent,
+    CategorySharePopupComponent,
   ],
   imports: [
     BrowserModule,

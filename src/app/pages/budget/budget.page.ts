@@ -103,6 +103,8 @@ export class BudgetPage implements OnInit {
     const category = {
       user: this.auth.User.id,
       name: this.categoryForm.value.name,
+      created: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
       expenses: []
     }
     this.categoryService.postCategoryObservable(category).subscribe(

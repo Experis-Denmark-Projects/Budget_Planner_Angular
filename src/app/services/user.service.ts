@@ -11,7 +11,8 @@ import { User } from '../models/user.model'
 export class UserService {
 
   apiUrl:string = environment.apiUrl
-  constructor(private readonly http:HttpClient, private readonly auth:AuthService) { }
+  constructor(private readonly http:HttpClient, private readonly auth:AuthService) { 
+  }
 
   /***** User Requests *****/
   getUserObservable():Observable<User>{

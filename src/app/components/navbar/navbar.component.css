@@ -15,11 +15,11 @@
     gap: 10px;
 }
 
-.profile-button img{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
+.profile-button-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .profile-button p{
@@ -35,4 +35,10 @@
 
 .logo:hover{
     cursor:pointer;
+}
+
+.notification-icon{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }

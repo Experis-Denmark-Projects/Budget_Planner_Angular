@@ -1,9 +1,11 @@
-import { Expense } from './expense.model'
-import { User } from './user.model'
+import { DatePipe } from '@angular/common'
 
 export type Category = {
-    id?: number,
-    name?: string,
-    user?: number,
-    expenses?: number[]
+  id?: number,
+  name?: string,
+  created?: Date,
+  lastModified?: Date,
+  user?: number,
+  expenses?: number[],
+  sharedCategories?: number[]
 }

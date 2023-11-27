@@ -15,9 +15,12 @@
                 
             </div>
         </form >
-        
+    </div>
 
-
+    <div class="shareRequestDiv">
+        <div>{{user?.username}} would like to share INDSÆT CATEGORY NAVN category with you.</div>
+        <button class="acceptBtn" (click)="acceptCategorySharing()" > <img src="../../assets/check.svg" alt=""> </button>
+        <button class="rejectBtn" (click)="rejectCategorySharing()"> <img src="../../assets/x.svg" alt=""></button>
     </div>
 
 </div>
