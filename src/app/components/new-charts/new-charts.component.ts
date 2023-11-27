@@ -9,6 +9,7 @@ import { Chart, ChartTypeRegistry } from 'chart.js/auto';
 export class NewChartsComponent implements OnInit {
   title = 'Antal procent hver kategory fylder fra det total budget ';
   chart: any = [];
+  chart2:any =[];
 
   chartType: keyof ChartTypeRegistry= 'pie';
   
@@ -30,6 +31,7 @@ export class NewChartsComponent implements OnInit {
   createChart() {
 
     const percentages = this.calculatePercentages(this.input);
+  
   
     this.chart = new Chart('canvas', {
       type: this.chartType, // Change chart type to pie
@@ -55,7 +57,7 @@ export class NewChartsComponent implements OnInit {
         plugins: {
           legend: {
             display: true,
-            position: 'left',
+            position: 'bottom',
             labels: {
               generateLabels: function (chart: any) {
                 const data = chart.data;
@@ -77,8 +79,40 @@ export class NewChartsComponent implements OnInit {
     });
   }
 
+  createChart2(){
+    
+    const percentages = this.input
+  
+    this.chart2 = new Chart('canvas2', {
+      type: 'bar', // Change chart type to pie
+      data: {
+        labels: percentages.map(item => item.name),
+        datasets: [
+          {
+            
+            data: percentages.map(item => item.totalPrice),
+            label: 'Total spent on each category',
+            backgroundColor: [
+              'red'
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+
   ngOnInit() {
     this.createChart();
+    this.createChart2();
   }
 
 toggleChartType(){

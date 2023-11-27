@@ -1,4 +1,15 @@
 .chart-container{
-    width: 500px;
+    width: 800px;
     height: auto;
+
+}
+
+.outer-canva-container{
+    display: flex;
+
+    align-items: center;
+}
+.canvas-container {
+    margin: 20px;
+    
 }
