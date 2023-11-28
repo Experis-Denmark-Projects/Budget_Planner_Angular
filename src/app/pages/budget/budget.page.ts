@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Category } from 'src/app/models/category.model';
+import { Category, CategorySortingOptions } from 'src/app/models/category.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { Observable, Subject  } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
-import { addCategory, deleteCategory } from 'src/app/redux/actions/category.actions';
+import { addCategory, deleteCategory, sortCategoriesAlphabetic, sortCategoriesByCreated, updateCategory } from 'src/app/redux/actions/category.actions';
 import { selectCategories } from 'src/app/redux/selectors/categories.selectors';
 import { categoryTotalExpense, remainingBudget, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
@@ -21,6 +21,7 @@ import { selectTotalBudget } from 'src/app/redux/selectors/user.selectors';
   styleUrls: ['./budget.page.css']
 })
 export class BudgetPage implements OnInit {
+  selectedSortingOption: string = '';
   categories$: Observable<Category[]> = new Observable<Category[]>
   remainingBudget$:Observable<number> = new Observable<number>
   total$:Observable<number> = new Observable<number>
@@ -38,12 +39,15 @@ export class BudgetPage implements OnInit {
   showGraph:boolean = false
 
   private ngUnsubscribe$ = new Subject<void>();
-
+  categorySortingOptions = CategorySortingOptions
+  keys = []
   constructor(
     public readonly categoryService:CategoryService,
     public readonly auth:AuthService,
     private store: Store<AppState>,
-    private activatedRoute:ActivatedRoute){}
+    private activatedRoute:ActivatedRoute){
+      
+    }
 
   ngOnInit(): void { 
     this.categories$ = this.store.select(selectCategories())
@@ -61,11 +65,13 @@ export class BudgetPage implements OnInit {
     }else{
       this.categories$.subscribe({
         next:(categories:Category[]) => {
+          this.input = []
           categories.map((category:Category)  => {
             if(category.id){
               const total = this.store.select(categoryTotalExpense(category.id));
               total.subscribe({
                 next: (val) => {
+                  console.log(`Input: ${this.input.length}`)
                   this.input.push({name: category.name ?? '', totalPrice: val})
                   this.showGraph = true;
                 }
@@ -130,4 +136,28 @@ export class BudgetPage implements OnInit {
       })
     }
   }
+   /** Category Sorting Options */
+  onCategorySortingOptionChnage(){
+    switch(this.selectedSortingOption){
+      case CategorySortingOptions.alphabetic:
+        this.store.dispatch(sortCategoriesAlphabetic());
+        break;
+      case CategorySortingOptions.created:
+        this.store.dispatch(sortCategoriesByCreated());
+        break;
+      case CategorySortingOptions.lastModified:
+        
+        break;
+      case CategorySortingOptions.ascending:
+        // Budget 
+        break;
+      case CategorySortingOptions.descending:
+        // Budget
+        break;
+    }
+  }
+
+  setAlphabeticCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.alphabetic;
+  setCreatedCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.created;
+  setLastModifiedCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.lastModified;
 }

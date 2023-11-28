@@ -8,6 +8,13 @@
         </div>
         
         <button (click)="showPieChart()">Show Pie Chart</button>
+        <select name="category-sorting-dropdown" id="category-sorting-dropdown" [(ngModel)]="selectedSortingOption" (ngModelChange)="onCategorySortingOptionChnage()">
+          <option value="Alphabetic">Alphabetic</option>
+          <option value="LastModified">Most Recent</option>
+          <option value="Created">Created</option>
+<!--           <option value="descending">Descending</option>
+          <option value="ascending">Ascending</option> -->
+        </select>
     </div>
     <div class="budgetPageDiv">
         

@@ -1,4 +1,10 @@
-import { DatePipe } from '@angular/common'
+export enum CategorySortingOptions {
+  alphabetic = 'Alphabetic',
+  lastModified = 'LastModified',
+  created = 'Created',
+  ascending = 'Ascending',
+  descending = 'Descending'
+}
 
 export type Category = {
   id?: number,

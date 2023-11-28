@@ -5,6 +5,7 @@ import { userReducer } from './reducers/user.reducer';
 import { categoriesReducer } from './reducers/categories.reducer';
 import { expensesReducer } from './reducers/expenses.reducer';
 import { categorySharingsReducer } from './reducers/category-sharings.reducer';
+import { categorySortingReducer } from './reducers/category-sorting.reducer';
 
 export interface AppState {}
 
@@ -13,7 +14,8 @@ export const reducers: ActionReducerMap<AppState> = {
   auth: userReducer,
   categories: categoriesReducer,
   expenses: expensesReducer,
-  categorySharings: categorySharingsReducer
+  categorySharings: categorySharingsReducer,
+  categorySorting: categorySortingReducer,
 }
 
 export function logger(reducer:ActionReducer<any>):ActionReducer<any>{
