@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@auth0/auth0-angular';
 import { addCategory, deleteCategory, sortCategoriesAlphabetic, sortCategoriesByCreated, updateCategory } from 'src/app/redux/actions/category.actions';
-import { selectCategories } from 'src/app/redux/selectors/categories.selectors';
+import { selectCategories, selectCategorySortingMethod } from 'src/app/redux/selectors/categories.selectors';
 import { categoryTotalExpense, remainingBudget, selectExpenses } from 'src/app/redux/selectors/expenses.selectors';
 import { Expense } from 'src/app/models/expense.model';
 import { deleteExpense } from 'src/app/redux/actions/expenses.actions';
@@ -56,6 +56,8 @@ export class BudgetPage implements OnInit {
       this.total$ = this.store.select(selectTotalBudget);
       this.remainingBudget$ = this.store.select(remainingBudget);
     });
+    
+    
   }
 
   showPieChart(){
@@ -108,13 +110,14 @@ export class BudgetPage implements OnInit {
     const category = {
       user: this.auth.User.id,
       name: this.categoryForm.value.name,
-      created: new Date().toISOString(),
-      lastModified: new Date().toISOString(),
+      created: new Date(),
+      lastModified: new Date(),
       expenses: []
     }
     this.categoryService.postCategoryObservable(category).subscribe(
       ((category:Category) => {
         this.store.dispatch(addCategory({category}))
+        this.onCategorySortingOptionChange()
         this.name.setValue('');
       })
     )
@@ -136,7 +139,7 @@ export class BudgetPage implements OnInit {
     }
   }
    /** Category Sorting Options */
-  onCategorySortingOptionChnage(){
+  onCategorySortingOptionChange(){
     switch(this.selectedSortingOption){
       case 'Alphabetic':
         this.store.dispatch(sortCategoriesAlphabetic());
@@ -145,7 +148,6 @@ export class BudgetPage implements OnInit {
         this.store.dispatch(sortCategoriesByCreated());
         break;
       case 'LastModified':
-        
         break;
       case 'Ascending':
         // Budget 
@@ -154,5 +156,5 @@ export class BudgetPage implements OnInit {
         // Budget
         break;
     }
-  }
+  }  
 }

@@ -108,6 +108,7 @@ export class CategoryComponent implements OnInit{
           if(this.categoryForm.value && this.categoryForm.value.name){
             this.category = {...this.category, name: this.categoryForm.value.name}
             this.store.dispatch(updateCategory({category: {...this.category, name: this.categoryForm.value.name}}))
+
           }
         },
         error: () => {
@@ -131,7 +132,8 @@ export class CategoryComponent implements OnInit{
     this.dialog.open(CategorySharePopupComponent, {
       id: `${this.category.id} Share Category Dialog`,
       width: '700px',
-      height: '200px'
+      height: '200px',
+      data: {category:this.category}
     })
   }
 

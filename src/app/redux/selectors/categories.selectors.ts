@@ -3,6 +3,13 @@ import { CategoriesState } from '../reducers/categories.reducer';
 
 export const selectCategoriesState = createFeatureSelector<CategoriesState>('categories');
 
+export const selectCategorySortingState = createFeatureSelector<CategoriesState>('sortingMethod');
+
+export const selectCategorySortingMethod = createSelector(
+  selectCategorySortingState,
+  state => state.sortingMethod
+)
+
 export const selectCategories = () => createSelector(
   selectCategoriesState,
   state => state.categories

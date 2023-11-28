@@ -4,12 +4,14 @@ import { CategoriesActions } from '../action-types';
 
 export interface CategoriesState {
     categories:Category[],
-    isLoaded?:boolean
+    isLoaded?:boolean,
+    sortingMethod: string
 }
 
 export const initialCategoriesState: CategoriesState = {
-    categories: [],
-    isLoaded:false
+  categories: [],
+  isLoaded:false,
+  sortingMethod: 'LastModified',
 }
 
 export const categoriesReducer = createReducer(
@@ -18,35 +20,40 @@ export const categoriesReducer = createReducer(
   on(CategoriesActions.setCategories, (state, action) => {
     return {
       categories: action.categories,
-      isLoaded: action.isLoaded
+      isLoaded: action.isLoaded,
+      sortingMethod: state.sortingMethod
     }
   }),
 
   on(CategoriesActions.addCategory, (state, action) => {
     return {
       categories: [...state.categories, action.category],
-      isLoaded: true
+      isLoaded: true,
+      sortingMethod: state.sortingMethod
     }
   }),
 
   on(CategoriesActions.updateCategory, (state, action) => {
     return {
       categories: state.categories.map(category => category.id === action.category.id ? action.category : category),
-      isLoaded: state.isLoaded
+      isLoaded: state.isLoaded,
+      sortingMethod: state.sortingMethod
     }
   }),
 
   on(CategoriesActions.deleteCategory, (state, action) => {
     return {
       categories: state.categories.filter(category => category.id !== action.category.id),
-      isLoaded: state.isLoaded
+      isLoaded: state.isLoaded,
+      sortingMethod: state.sortingMethod
     }
   }),
 
   on(CategoriesActions.setCategoriesDefault, (state, action) => {
     return {
       categories: [],
-      isLoaded: false
+      isLoaded: false,
+      sortingMethod: 'LastModified'
     }
   }),
 
@@ -55,21 +62,10 @@ export const categoriesReducer = createReducer(
   on(CategoriesActions.sortCategoriesAlphabetic, (state, action) => {
     return {
       categories: state.categories.length > 0 ? [...state.categories].sort((a, b) => (a.name || '').localeCompare(b.name || '')) : state.categories,
-      isLoaded: state.isLoaded
+      isLoaded: state.isLoaded,
+      sortingMethod: state.sortingMethod
     }
   }),
-
-  on(CategoriesActions.sortCategoriesByCreated, (state, action) => {
-    return {
-      categories: [...state.categories].sort((a, b) => {
-        const dateA = a.created instanceof Date ? a.created : new Date(0);
-        const dateB = b.created instanceof Date ? b.created : new Date(0);
-        return dateA.getTime() - dateB.getTime();
-      }),
-      isLoaded: state.isLoaded
-    }
-  }),
-
 
   on(CategoriesActions.sortCategoriesByCreated, (state, action) => {
     return {
@@ -79,6 +75,20 @@ export const categoriesReducer = createReducer(
         return dateA.getTime() - dateB.getTime();
       }),
       isLoaded: state.isLoaded,
+      sortingMethod: state.sortingMethod
+    }
+  }),
+
+
+  on(CategoriesActions.sortCategoriesByLastModified, (state, action) => {
+    return {
+      categories: [...state.categories].sort((a, b) => {
+        const dateA = new Date(a.lastModified ?? 0);
+        const dateB = new Date(b.lastModified ?? 0);
+        return dateB.getTime() - dateA.getTime();
+      }),
+      isLoaded: state.isLoaded,
+      sortingMethod: state.sortingMethod
     };
   }),
 )
