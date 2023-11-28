@@ -14,40 +14,64 @@ export const initialCategoriesState: CategoriesState = {
 }
 
 export const categoriesReducer = createReducer(
-    initialCategoriesState,
+  initialCategoriesState,
 
-    on(CategoriesActions.setCategories, (state, action) => {
-        return {
-            categories: action.categories,
-            isLoaded: action.isLoaded
-        }
-    }),
+  on(CategoriesActions.setCategories, (state, action) => {
+    return {
+      categories: action.categories,
+      isLoaded: action.isLoaded
+    }
+  }),
 
-    on(CategoriesActions.addCategory, (state, action) => {
-        return {
-            categories: [...state.categories, action.category],
-            isLoaded: true
-        }
-    }),
+  on(CategoriesActions.addCategory, (state, action) => {
+    return {
+      categories: [...state.categories, action.category],
+      isLoaded: true
+    }
+  }),
 
-    on(CategoriesActions.updateCategory, (state, action) => {
-        return {
-            categories: state.categories.map(category => category.id === action.category.id ? action.category : category),
-            isLoaded: state.isLoaded
-        }
-    }),
+  on(CategoriesActions.updateCategory, (state, action) => {
+    return {
+      categories: state.categories.map(category => category.id === action.category.id ? action.category : category),
+      isLoaded: state.isLoaded
+    }
+  }),
 
-    on(CategoriesActions.deleteCategory, (state, action) => {
-        return {
-            categories: state.categories.filter(category => category.id !== action.category.id),
-            isLoaded: state.isLoaded
-        }
-    }),
+  on(CategoriesActions.deleteCategory, (state, action) => {
+    return {
+      categories: state.categories.filter(category => category.id !== action.category.id),
+      isLoaded: state.isLoaded
+    }
+  }),
 
-    on(CategoriesActions.setCategoriesDefault, (state, action) => {
-        return {
-            categories: [],
-            isLoaded: false
-        }
-    }),
+  on(CategoriesActions.setCategoriesDefault, (state, action) => {
+    return {
+      categories: [],
+      isLoaded: false
+    }
+  }),
+
+  /* Sorting Reducers */
+
+  on(CategoriesActions.sortCategoriesAlphabetic, (state, action) => {
+    return {
+      categories: state.categories.length > 0 ? [...state.categories].sort((a, b) => (a.name || '').localeCompare(b.name || '')) : state.categories,
+      isLoaded: state.isLoaded
+    }
+  }),
+
+  on(CategoriesActions.sortCategoriesByCreated, (state, action) => {
+    return {
+      categories: [...state.categories].sort((a, b) => (a.created || new Date(0)).getTime() - (b.created || new Date(0)).getTime()),
+      isLoaded: state.isLoaded
+    }
+  }),
+
+
+  on(CategoriesActions.sortCategoriesByLastModified, (state, action) => {
+    return {
+      categories: [...state.categories].sort((a, b) => (b.lastModified || new Date(0)).getTime() - (a.lastModified || new Date(0)).getTime()),
+      isLoaded: state.isLoaded
+    }
+  }),
 )
