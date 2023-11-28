@@ -65,11 +65,13 @@ export class BudgetPage implements OnInit {
     }else{
       this.categories$.subscribe({
         next:(categories:Category[]) => {
+          this.input = []
           categories.map((category:Category)  => {
             if(category.id){
               const total = this.store.select(categoryTotalExpense(category.id));
               total.subscribe({
                 next: (val) => {
+                  console.log(`Input: ${this.input.length}`)
                   this.input.push({name: category.name ?? '', totalPrice: val})
                   this.showGraph = true;
                 }

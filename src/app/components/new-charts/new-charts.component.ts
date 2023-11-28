@@ -118,7 +118,6 @@ export class NewChartsComponent implements OnInit {
 toggleChartType(){
   //this.chartType = 'bubble'
   this.chartType = this.chartType === 'pie' ? 'bar' : 'pie';
-
   if (this.chart) {
     this.chart.destroy();
   }
