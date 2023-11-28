@@ -71,7 +71,6 @@ export class BudgetPage implements OnInit {
               const total = this.store.select(categoryTotalExpense(category.id));
               total.subscribe({
                 next: (val) => {
-                  console.log(`Input: ${this.input.length}`)
                   this.input.push({name: category.name ?? '', totalPrice: val})
                   this.showGraph = true;
                 }
@@ -139,25 +138,21 @@ export class BudgetPage implements OnInit {
    /** Category Sorting Options */
   onCategorySortingOptionChnage(){
     switch(this.selectedSortingOption){
-      case CategorySortingOptions.alphabetic:
+      case 'Alphabetic':
         this.store.dispatch(sortCategoriesAlphabetic());
         break;
-      case CategorySortingOptions.created:
+      case 'Created':
         this.store.dispatch(sortCategoriesByCreated());
         break;
-      case CategorySortingOptions.lastModified:
+      case 'LastModified':
         
         break;
-      case CategorySortingOptions.ascending:
+      case 'Ascending':
         // Budget 
         break;
-      case CategorySortingOptions.descending:
+      case 'Descending':
         // Budget
         break;
     }
   }
-
-  setAlphabeticCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.alphabetic;
-  setCreatedCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.created;
-  setLastModifiedCategorySorting = () => this.selectedSortingOption = CategorySortingOptions.lastModified;
 }

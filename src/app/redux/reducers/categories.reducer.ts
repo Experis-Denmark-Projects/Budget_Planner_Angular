@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { Category } from 'src/app/models/category.model';
 import { CategoriesActions } from '../action-types';
-import { Expense } from 'src/app/models/expense.model';
 
 export interface CategoriesState {
     categories:Category[],
@@ -62,16 +61,24 @@ export const categoriesReducer = createReducer(
 
   on(CategoriesActions.sortCategoriesByCreated, (state, action) => {
     return {
-      categories: [...state.categories].sort((a, b) => (a.created || new Date(0)).getTime() - (b.created || new Date(0)).getTime()),
+      categories: [...state.categories].sort((a, b) => {
+        const dateA = a.created instanceof Date ? a.created : new Date(0);
+        const dateB = b.created instanceof Date ? b.created : new Date(0);
+        return dateA.getTime() - dateB.getTime();
+      }),
       isLoaded: state.isLoaded
     }
   }),
 
 
-  on(CategoriesActions.sortCategoriesByLastModified, (state, action) => {
+  on(CategoriesActions.sortCategoriesByCreated, (state, action) => {
     return {
-      categories: [...state.categories].sort((a, b) => (b.lastModified || new Date(0)).getTime() - (a.lastModified || new Date(0)).getTime()),
-      isLoaded: state.isLoaded
-    }
+      categories: [...state.categories].sort((a, b) => {
+        const dateA = new Date(a.created ?? 0);
+        const dateB = new Date(b.created ?? 0);
+        return dateA.getTime() - dateB.getTime();
+      }),
+      isLoaded: state.isLoaded,
+    };
   }),
 )
