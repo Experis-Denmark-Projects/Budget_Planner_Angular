@@ -1,5 +1,14 @@
 <div class="chart-container">
-    <button (click)="toggleChartType()" >Change chart type</button>
-    <h2>{{title}}</h2>
-    <canvas id="canvas">{{chart}}</canvas>
+    <div class="outer-canva-container">
+        <div class="canvas-container">
+            <h2>% of each category based on total budget</h2>
+            <button (click)="toggleChartType()">Toggle between pie and bar char</button>
+            <canvas id="canvas">{{chart}}</canvas>
+        </div>
+    
+        <div class="canvas-container">
+            <h2>Total spent on each category.</h2>
+            <canvas id="canvas2">{{chart2}}</canvas>
+        </div>
+    </div>
 </div>

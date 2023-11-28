@@ -7,7 +7,7 @@
 }
 
 .budgetContainer{
-    height: 100%;
+    height: fit-content;
     background-color: lightgray;
 }
 
