@@ -28,7 +28,7 @@ export class NewChartsComponent implements OnInit {
     }));
   }
 
-  createChart() {
+  createProcentagesChart() {
 
     const percentages = this.calculatePercentages(this.input);
   
@@ -79,7 +79,7 @@ export class NewChartsComponent implements OnInit {
     });
   }
 
-  createChart2(){
+  createTotalsChart(){
     
     const percentages = this.input
   
@@ -111,8 +111,8 @@ export class NewChartsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.createChart();
-    this.createChart2();
+    this.createProcentagesChart();
+    this.createTotalsChart();
   }
 
 toggleChartType(){
@@ -121,7 +121,7 @@ toggleChartType(){
   if (this.chart) {
     this.chart.destroy();
   }
-  this.createChart();
+  this.createProcentagesChart();
 }
 
 }
