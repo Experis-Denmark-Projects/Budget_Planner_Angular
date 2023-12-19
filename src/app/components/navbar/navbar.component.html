@@ -1,7 +1,7 @@
 <header class="headerDiv">
     <img class="logo" src="../../assets/budgetPlanner.svg" alt="" (click)="router.navigateByUrl('/')">
     <div class="profile-button">
-      <img *ngIf="isAuthenticated$ | async" class="notification-icon" src="../../assets/notification-icon.svg" alt="" (click)="openNotificationDialog()">
+      <!-- <img *ngIf="isAuthenticated$ | async" class="notification-icon" src="../../assets/notification-icon.svg" alt="" (click)="openNotificationDialog()"> -->
       <!-- Should retrieve & display the number of notifications -->
       <p></p>
       <p> {{ auth.User.username }}</p>

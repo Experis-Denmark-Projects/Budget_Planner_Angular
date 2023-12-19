@@ -45,12 +45,13 @@ export class BudgetResolver implements Resolve<Observable<any>> {
                 }),
                 switchMap((expenses: Expense[]) => {
                   this.store.dispatch(setExpenses({ expenses }));
-                  return this.categoryService.getCategorySharingsObservable();
+                  return of(true);
+                  //return this.categoryService.getCategorySharingsObservable();
                 }),
-                switchMap((categorySharings: CategorySharing[]) => {
+                /* switchMap((categorySharings: CategorySharing[]) => {
                   this.store.dispatch(setCategorySharing({ categorySharings }));
                   return of(true);
-                })
+                }) */
               );
             })
           );
